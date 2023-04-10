@@ -21,6 +21,8 @@ public class BootstrapConfig {
 
         private Integer workThreadSize;
 
+        private Long heartBeatTime;
+
         /**
          * redis配置
          */

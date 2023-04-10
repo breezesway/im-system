@@ -53,16 +53,18 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<Message> {
                     (NioSocketChannel) channelHandlerContext.channel());
 
         }else if(command == SystemCommand.LOGOUT.getCommand()){
-            //删除session
-            String userId = (String) channelHandlerContext.channel().attr(AttributeKey.valueOf(Constants.UserId)).get();
-            Integer appId = (Integer) channelHandlerContext.channel().attr(AttributeKey.valueOf(Constants.AppId)).get();
-            Integer clientType = (Integer) channelHandlerContext.channel().attr(AttributeKey.valueOf(Constants.ClientType)).get();
-            SessionSocketHolder.remove(appId,userId,clientType);
-            //redis删除
-            RedissonClient redissonClient = RedisManager.getRedissonClient();
-            RMap<Object, Object> map = redissonClient.getMap(appId + Constants.RedisConstants.UserSessionConstants + userId);
-            map.remove(clientType);
-            channelHandlerContext.channel().close();
+            SessionSocketHolder.removeUserSession((NioSocketChannel) channelHandlerContext.channel());
+        }else if (command == SystemCommand.PING.getCommand()){
+            channelHandlerContext.channel().attr(AttributeKey.valueOf(Constants.ReadTime)).set(System.currentTimeMillis());
+
         }
+    }
+
+    /**
+     * 处理心跳超时逻辑
+     */
+    @Override
+    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+
     }
 }

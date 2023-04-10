@@ -3,6 +3,10 @@ package com.cgz.im.common.enums.command;
 public enum SystemCommand implements Command{
 
     /**
+     * 心跳 9999
+     */
+    PING(0x270f),
+    /**
      * 登录 9000
      */
     LOGIN(0x2328),
@@ -10,7 +14,7 @@ public enum SystemCommand implements Command{
     /**
      * 登出 9003
      */
-    LOGOUT(0X232b),
+    LOGOUT(0x232b),
     ;
 
     private int command;

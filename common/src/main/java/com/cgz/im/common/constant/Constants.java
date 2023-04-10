@@ -14,6 +14,8 @@ public class Constants {
 
     public static final String ClientType = "clientType";
 
+    public static final String ReadTime = "readTime";
+
     public static class RedisConstants{
         /**
          * 用户session,appId+UserSessionConstants+用户id

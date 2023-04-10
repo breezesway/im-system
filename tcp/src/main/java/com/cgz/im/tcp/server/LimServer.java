@@ -2,6 +2,7 @@ package com.cgz.im.tcp.server;
 
 import com.cgz.im.codec.MessageDecoder;
 import com.cgz.im.codec.config.BootstrapConfig;
+import com.cgz.im.tcp.handler.HeartBeatHandler;
 import com.cgz.im.tcp.handler.NettyServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
@@ -11,6 +12,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.timeout.IdleStateHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,6 +46,8 @@ public class LimServer {
                     protected void initChannel(SocketChannel socketChannel) throws Exception {
                         ChannelPipeline pipeline = socketChannel.pipeline();
                         pipeline.addLast(new MessageDecoder());
+                        pipeline.addLast(new IdleStateHandler(0,0,1));//超时检测，会调用下一个handler的userenventtrigger
+                        pipeline.addLast(new HeartBeatHandler(config.getHeartBeatTime()));
                         pipeline.addLast(new NettyServerHandler());
                     }
                 });
