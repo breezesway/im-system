@@ -1,6 +1,5 @@
 package com.cgz.im.codec;
 
-
 import com.alibaba.fastjson.JSONObject;
 import com.cgz.im.codec.proto.MessagePack;
 import io.netty.buffer.ByteBuf;

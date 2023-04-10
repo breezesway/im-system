@@ -1,6 +1,7 @@
 package com.cgz.im.tcp;
 
 import com.cgz.im.codec.config.BootstrapConfig;
+import com.cgz.im.tcp.redis.RedisManager;
 import com.cgz.im.tcp.server.LimServer;
 import com.cgz.im.tcp.server.LimWebSocketServer;
 import org.yaml.snakeyaml.Yaml;
@@ -24,6 +25,8 @@ public class TcpApplication {
 
             new LimServer(bootstrapConfig.getLim()).start();
             new LimWebSocketServer(bootstrapConfig.getLim()).start();
+
+            RedisManager.init(bootstrapConfig);
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(500);

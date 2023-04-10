@@ -18,7 +18,6 @@ import io.netty.buffer.ByteBuf;
  *               4位表示数据长度
  *               data
  *               后续将解码方式加到数据头根据不同的解码方式解码，如pb，json，现在用json字符串
- * @version: 1.0
  */
 public class ByteBufToMessageUtils {
 
@@ -56,7 +55,6 @@ public class ByteBufToMessageUtils {
 
         byte [] bodyData = new byte[bodyLen];
         in.readBytes(bodyData);
-
 
         MessageHeader messageHeader = new MessageHeader();
         messageHeader.setAppId(appId);

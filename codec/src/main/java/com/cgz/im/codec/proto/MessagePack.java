@@ -5,8 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * @author: Chackylee
- * @description: 消息服务发送给tcp的包体,tcp再根据改包体解析成Message发给客户端
+ * @description: 消息服务发送给tcp的包体,tcp再根据包体解析成Message发给客户端
  **/
 @Data
 public class MessagePack<T> implements Serializable {
