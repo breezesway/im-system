@@ -23,6 +23,8 @@ public class BootstrapConfig {
 
         private Long heartBeatTime;
 
+        private Integer loginModel;
+
         /**
          * redis配置
          */
