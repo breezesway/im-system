@@ -1,7 +1,5 @@
 package com.cgz.im.tcp.receiver;
 
-import com.alibaba.fastjson.JSONObject;
-import com.cgz.im.codec.proto.MessagePack;
 import com.cgz.im.common.constant.Constants;
 import com.cgz.im.tcp.utils.MQFactory;
 import com.rabbitmq.client.AMQP;
@@ -9,19 +7,22 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 
 @Slf4j
 public class MessageReceiver {
 
+    private static String brokerId;
+
     private static void startReceiveMessage() {
         try {
-            Channel channel = MQFactory.getChannel(Constants.RabbitConstants.MessageService2Im);
-            channel.queueDeclare(Constants.RabbitConstants.MessageService2Im, true, false, false, null);
-            channel.queueBind(Constants.RabbitConstants.MessageService2Im,
+            Channel channel = MQFactory.getChannel(Constants.RabbitConstants.MessageService2Im+brokerId);
+            channel.queueDeclare(Constants.RabbitConstants.MessageService2Im+brokerId, true, false, false, null);
+            channel.queueBind(Constants.RabbitConstants.MessageService2Im+brokerId,
                     Constants.RabbitConstants.MessageService2Im,
-                    null);
+                    brokerId);
             channel.basicConsume(Constants.RabbitConstants.MessageService2Im,
                     false,
                     new DefaultConsumer(channel) {
@@ -55,6 +56,13 @@ public class MessageReceiver {
     }
 
     public static void init(){
+        startReceiveMessage();
+    }
+
+    public static void init(String brokerId){
+        if(StringUtils.isBlank(MessageReceiver.brokerId)){
+            MessageReceiver.brokerId = brokerId;
+        }
         startReceiveMessage();
     }
 }

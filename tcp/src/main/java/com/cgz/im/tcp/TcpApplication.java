@@ -35,7 +35,7 @@ public class TcpApplication {
 
             RedisManager.init(bootstrapConfig);
             MQFactory.init(bootstrapConfig.getLim().getRabbitmq());
-            MessageReceiver.init();
+            MessageReceiver.init(bootstrapConfig.getLim().getBrokerId().toString());
             registerZk(bootstrapConfig);
         } catch (Exception e) {
             e.printStackTrace();
