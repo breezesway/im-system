@@ -25,37 +25,37 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<Message> {
     private final static Logger logger = LoggerFactory.getLogger(NettyServerHandler.class);
 
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, Message message) throws Exception {
+    protected void channelRead0(ChannelHandlerContext ctx, Message msg) throws Exception {
 
-        Integer command = message.getMessageHeader().getCommand();
+        Integer command = msg.getMessageHeader().getCommand();
 
         if(command == SystemCommand.LOGIN.getCommand()){
 
-            LoginPack loginPack = JSON.parseObject(JSONObject.toJSONString(message.getMessagePack()),new TypeReference<LoginPack>(){}.getType());
-            channelHandlerContext.channel().attr(AttributeKey.valueOf(Constants.UserId)).set(loginPack.getUserId());
-            channelHandlerContext.channel().attr(AttributeKey.valueOf(Constants.AppId)).set(message.getMessageHeader().getAppId());
-            channelHandlerContext.channel().attr(AttributeKey.valueOf(Constants.ClientType)).set(message.getMessageHeader().getClientType());
+            LoginPack loginPack = JSON.parseObject(JSONObject.toJSONString(msg.getMessagePack()),new TypeReference<LoginPack>(){}.getType());
+            ctx.channel().attr(AttributeKey.valueOf(Constants.UserId)).set(loginPack.getUserId());
+            ctx.channel().attr(AttributeKey.valueOf(Constants.AppId)).set(msg.getMessageHeader().getAppId());
+            ctx.channel().attr(AttributeKey.valueOf(Constants.ClientType)).set(msg.getMessageHeader().getClientType());
 
             UserSession userSession = new UserSession();
-            userSession.setAppId(message.getMessageHeader().getAppId());
-            userSession.setClientType(message.getMessageHeader().getClientType());
+            userSession.setAppId(msg.getMessageHeader().getAppId());
+            userSession.setClientType(msg.getMessageHeader().getClientType());
             userSession.setConnectState(ImConnectStatusEnum.ONLINE_STATUS.getCode());
 
             //存到Redis
             RedissonClient redissonClient = RedisManager.getRedissonClient();
-            RMap<String, String> map = redissonClient.getMap(message.getMessageHeader().getAppId() + Constants.RedisConstants.UserSessionConstants + loginPack.getUserId());
-            map.put(message.getMessageHeader().getClientType().toString(),JSONObject.toJSONString(userSession));
+            RMap<String, String> map = redissonClient.getMap(msg.getMessageHeader().getAppId() + Constants.RedisConstants.UserSessionConstants + loginPack.getUserId());
+            map.put(msg.getMessageHeader().getClientType().toString(),JSONObject.toJSONString(userSession));
 
             //将channel存起来
-            SessionSocketHolder.put(message.getMessageHeader().getAppId(),
+            SessionSocketHolder.put(msg.getMessageHeader().getAppId(),
                     loginPack.getUserId(),
-                    message.getMessageHeader().getClientType(),
-                    (NioSocketChannel) channelHandlerContext.channel());
+                    msg.getMessageHeader().getClientType(),
+                    (NioSocketChannel) ctx.channel());
 
         }else if(command == SystemCommand.LOGOUT.getCommand()){
-            SessionSocketHolder.removeUserSession((NioSocketChannel) channelHandlerContext.channel());
+            SessionSocketHolder.removeUserSession((NioSocketChannel) ctx.channel());
         }else if (command == SystemCommand.PING.getCommand()){
-            channelHandlerContext.channel().attr(AttributeKey.valueOf(Constants.ReadTime)).set(System.currentTimeMillis());
+            ctx.channel().attr(AttributeKey.valueOf(Constants.ReadTime)).set(System.currentTimeMillis());
 
         }
     }

@@ -1,9 +1,11 @@
 package com.cgz.im.tcp;
 
 import com.cgz.im.codec.config.BootstrapConfig;
+import com.cgz.im.tcp.receiver.MessageReceiver;
 import com.cgz.im.tcp.redis.RedisManager;
 import com.cgz.im.tcp.server.LimServer;
 import com.cgz.im.tcp.server.LimWebSocketServer;
+import com.cgz.im.tcp.utils.MQFactory;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.FileInputStream;
@@ -27,6 +29,8 @@ public class TcpApplication {
             new LimWebSocketServer(bootstrapConfig.getLim()).start();
 
             RedisManager.init(bootstrapConfig);
+            MQFactory.init(bootstrapConfig.getLim().getRabbitmq());
+            MessageReceiver.init();
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(500);
