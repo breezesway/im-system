@@ -3,6 +3,9 @@ package com.cgz.im.common.model;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * 暂时没用到该类
+ */
 @Data
 @NoArgsConstructor
 public class ClientInfo {

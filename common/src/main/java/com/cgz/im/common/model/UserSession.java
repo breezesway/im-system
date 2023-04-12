@@ -2,6 +2,11 @@ package com.cgz.im.common.model;
 
 import lombok.Data;
 
+/**
+ * 该类与UserClientDto的区别是：
+ * 该类代表一个用户一台设备的一个session
+ * UserClientDto起唯一标识作用
+ */
 @Data
 public class UserSession {
 

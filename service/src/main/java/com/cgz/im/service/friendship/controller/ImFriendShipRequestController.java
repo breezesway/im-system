@@ -21,7 +21,7 @@ public class ImFriendShipRequestController {
     @RequestMapping("/approveFriendRequest")
     public ResponseVO approveFriendRequest(@RequestBody @Validated ApproveFriendRequestReq req, Integer appId, String identifier){
         req.setAppId(appId);
-        req.setOperater(identifier);
+        req.setOperator(identifier);
         return imFriendShipRequestService.approveFriendRequest(req);
     }
 

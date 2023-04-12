@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 /**
- * 多端同步
+ * redis监听登录，根据不同策略实现多端登录
  * 1.单端登录：一端在线，踢掉除了本ClientType+imei的设备
  * 2.双端登录：允许pc和手机其中一端登录+web端
  * 3.三端登录：允许手机+pc+web，踢掉同端的其他imei，除了web
@@ -42,6 +42,7 @@ public class UserLoginMessageListener {
             public void onMessage(CharSequence charSequence, String msg) {
                 logger.info("收到用户上线通知:"+msg);
                 UserClientDto dto = JSONObject.parseObject(msg, UserClientDto.class);
+                //获取该用户所有设备的登录情况，看是否需要把其他设备踢下线
                 List<NioSocketChannel> nioSocketChannels = SessionSocketHolder.get(dto.getAppId(), dto.getUserId());
                 for (NioSocketChannel nioSocketChannel : nioSocketChannels) {
                     if(loginModel == DeviceMultiLoginEnum.ONE.getLoginMode()){
@@ -74,14 +75,17 @@ public class UserLoginMessageListener {
                     }else if(loginModel == DeviceMultiLoginEnum.THREE.getLoginMode()){
                         Integer clientType = (Integer) nioSocketChannel.attr(AttributeKey.valueOf(Constants.ClientType)).get();
                         String imei = (String) nioSocketChannel.attr(AttributeKey.valueOf(Constants.Imei)).get();
+                        //web端都可存在
                         if(dto.getClientType() == ClientType.WEB.getCode()){
                             continue;
                         }
                         boolean isSameClient = false;
+                        //手机端只允许一个存在
                         if((clientType == ClientType.IOS.getCode() || clientType == ClientType.ANDROID.getCode()) &&
                                 (dto.getClientType() == ClientType.IOS.getCode() || dto.getClientType() == ClientType.ANDROID.getCode())){
                             isSameClient = true;
                         }
+                        //PC端也只允许一个存在
                         if((clientType == ClientType.MAC.getCode() || clientType == ClientType.WINDOWS.getCode()) &&
                                 (dto.getClientType() == ClientType.MAC.getCode() || dto.getClientType() == ClientType.WINDOWS.getCode())){
                             isSameClient = true;

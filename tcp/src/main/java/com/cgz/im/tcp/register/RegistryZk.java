@@ -5,6 +5,9 @@ import com.cgz.im.common.constant.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * 项目启动时开启一个线程创建节点
+ */
 public class RegistryZk implements Runnable {
 
     private static Logger logger = LoggerFactory.getLogger(RegistryZk.class);

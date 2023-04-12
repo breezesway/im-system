@@ -91,7 +91,7 @@ public class ImFriendShipRequestServiceImpl implements ImFriendShipRequestServic
             throw new ApplicationException(FriendShipErrorCode.FRIEND_REQUEST_IS_NOT_EXIST);
         }
 
-        if(!req.getOperater().equals(imFriendShipRequestEntity.getToId())){
+        if(!req.getOperator().equals(imFriendShipRequestEntity.getToId())){
             //只能审批发给自己的好友请求
             throw new ApplicationException(FriendShipErrorCode.NOT_APPROVE_OTHER_MAN_REQUEST);
         }

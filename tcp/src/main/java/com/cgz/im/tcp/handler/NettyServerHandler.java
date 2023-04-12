@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.cgz.im.codec.pack.LoginPack;
 import com.cgz.im.codec.proto.Message;
+import com.cgz.im.codec.proto.MessageHeader;
 import com.cgz.im.common.constant.Constants;
 import com.cgz.im.common.enums.ImConnectStatusEnum;
 import com.cgz.im.common.enums.command.SystemCommand;
@@ -39,18 +40,19 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<Message> {
 
         Integer command = msg.getMessageHeader().getCommand();
 
-        if(command == SystemCommand.LOGIN.getCommand()){
+        if(command == SystemCommand.LOGIN.getCommand()){ //登录
 
+            MessageHeader msgHeader = msg.getMessageHeader();
             LoginPack loginPack = JSON.parseObject(JSONObject.toJSONString(msg.getMessagePack()),new TypeReference<LoginPack>(){}.getType());
 
             ctx.channel().attr(AttributeKey.valueOf(Constants.UserId)).set(loginPack.getUserId());
-            ctx.channel().attr(AttributeKey.valueOf(Constants.AppId)).set(msg.getMessageHeader().getAppId());
-            ctx.channel().attr(AttributeKey.valueOf(Constants.ClientType)).set(msg.getMessageHeader().getClientType());
-            ctx.channel().attr(AttributeKey.valueOf(Constants.Imei)).set(msg.getMessageHeader().getImei());
+            ctx.channel().attr(AttributeKey.valueOf(Constants.AppId)).set(msgHeader.getAppId());
+            ctx.channel().attr(AttributeKey.valueOf(Constants.ClientType)).set(msgHeader.getClientType());
+            ctx.channel().attr(AttributeKey.valueOf(Constants.Imei)).set(msgHeader.getImei());
 
             UserSession userSession = new UserSession();
-            userSession.setAppId(msg.getMessageHeader().getAppId());
-            userSession.setClientType(msg.getMessageHeader().getClientType());
+            userSession.setAppId(msgHeader.getAppId());
+            userSession.setClientType(msgHeader.getClientType());
             userSession.setConnectState(ImConnectStatusEnum.ONLINE_STATUS.getCode());
             userSession.setBrokerId(brokerId);
             try {
@@ -62,36 +64,31 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<Message> {
 
             //存到Redis
             RedissonClient redissonClient = RedisManager.getRedissonClient();
-            RMap<String, String> map = redissonClient.getMap(msg.getMessageHeader().getAppId() + Constants.RedisConstants.UserSessionConstants + loginPack.getUserId());
-            map.put(msg.getMessageHeader().getClientType()+":"+msg.getMessageHeader().getImei(),JSONObject.toJSONString(userSession));
+            RMap<String, String> map = redissonClient.getMap(msgHeader.getAppId() + Constants.RedisConstants.UserSessionConstants + loginPack.getUserId());
+            map.put(msgHeader.getClientType()+":"+ msgHeader.getImei(),JSONObject.toJSONString(userSession));
 
             //将channel存起来
-            SessionSocketHolder.put(msg.getMessageHeader().getAppId(),
+            SessionSocketHolder.put(msgHeader.getAppId(),
                     loginPack.getUserId(),
-                    msg.getMessageHeader().getClientType(),
-                    msg.getMessageHeader().getImei(),
+                    msgHeader.getClientType(),
+                    msgHeader.getImei(),
                     (NioSocketChannel) ctx.channel());
 
             UserClientDto dto = new UserClientDto();
-            dto.setImei(msg.getMessageHeader().getImei());
+            dto.setImei(msgHeader.getImei());
             dto.setUserId(loginPack.getUserId());
-            dto.setClientType(msg.getMessageHeader().getClientType());
-            dto.setAppId(msg.getMessageHeader().getAppId());
+            dto.setClientType(msgHeader.getClientType());
+            dto.setAppId(msgHeader.getAppId());
+
+            //这里采用Redis的发布订阅，因为redis的发布订阅可发送给所有端
             RTopic topic = redissonClient.getTopic(Constants.RedisConstants.UserLoginChannel);
             topic.publish(JSONObject.toJSONString(dto));
-        }else if(command == SystemCommand.LOGOUT.getCommand()){
+
+        }else if(command == SystemCommand.LOGOUT.getCommand()){ //退出
             SessionSocketHolder.removeUserSession((NioSocketChannel) ctx.channel());
-        }else if (command == SystemCommand.PING.getCommand()){
+        }else if (command == SystemCommand.PING.getCommand()){ //心跳
             ctx.channel().attr(AttributeKey.valueOf(Constants.ReadTime)).set(System.currentTimeMillis());
 
         }
-    }
-
-    /**
-     * 处理心跳超时逻辑
-     */
-    @Override
-    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
-
     }
 }

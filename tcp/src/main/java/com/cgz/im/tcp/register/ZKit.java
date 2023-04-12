@@ -3,6 +3,9 @@ package com.cgz.im.tcp.register;
 import com.cgz.im.common.constant.Constants;
 import org.I0Itec.zkclient.ZkClient;
 
+/**
+ * 创建节点
+ */
 public class ZKit {
 
     private ZkClient zkClient;

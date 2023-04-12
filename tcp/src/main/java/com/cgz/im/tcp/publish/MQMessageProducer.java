@@ -5,10 +5,14 @@ import com.cgz.im.tcp.utils.MQFactory;
 import com.rabbitmq.client.Channel;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 暂时未用到
+ */
 @Slf4j
 public class MQMessageProducer {
 
     public static void sendMessage(Object message){
+        //TODO
         Channel channel = null;
         String channelName = "";
         try {

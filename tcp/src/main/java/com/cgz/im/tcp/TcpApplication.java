@@ -26,13 +26,16 @@ public class TcpApplication {
     private static void start(String path) {
 
         try {
+            //读取yml配置文件
             Yaml yaml = new Yaml();
             FileInputStream inputStream = new FileInputStream(path);
             BootstrapConfig bootstrapConfig = yaml.loadAs(inputStream, BootstrapConfig.class);
 
+            //启动tcp服务和websocket服务
             new LimServer(bootstrapConfig.getLim()).start();
             new LimWebSocketServer(bootstrapConfig.getLim()).start();
 
+            //redis、mq、zookeeper初始化
             RedisManager.init(bootstrapConfig);
             MQFactory.init(bootstrapConfig.getLim().getRabbitmq());
             MessageReceiver.init(bootstrapConfig.getLim().getBrokerId().toString());

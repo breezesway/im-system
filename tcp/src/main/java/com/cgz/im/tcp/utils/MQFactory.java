@@ -9,6 +9,9 @@ import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeoutException;
 
+/**
+ * 消息队列客户端
+ */
 public class MQFactory {
 
     private static ConnectionFactory factory;
@@ -18,8 +21,7 @@ public class MQFactory {
     private static ConcurrentHashMap<String,Channel> channelMap = new ConcurrentHashMap<>();
 
     private static Connection getConnection() throws IOException, TimeoutException {
-        Connection connection = factory.newConnection();
-        return connection;
+        return factory.newConnection();
     }
 
     public static Channel getChannel(String channelName) throws IOException, TimeoutException {

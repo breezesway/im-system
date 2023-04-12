@@ -10,6 +10,9 @@ import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.util.AttributeKey;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 心跳检测
+ */
 @Slf4j
 public class HeartBeatHandler extends ChannelInboundHandlerAdapter {
 

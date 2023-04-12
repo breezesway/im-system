@@ -9,7 +9,6 @@ import com.cgz.im.common.enums.GroupMemberRoleEnum;
 import com.cgz.im.common.enums.GroupStatusEnum;
 import com.cgz.im.common.enums.GroupTypeEnum;
 import com.cgz.im.common.exception.ApplicationException;
-import com.cgz.im.common.model.ClientInfo;
 import com.cgz.im.service.group.dao.ImGroupEntity;
 import com.cgz.im.service.group.dao.mapper.ImGroupMapper;
 import com.cgz.im.service.group.model.req.*;
@@ -82,7 +81,7 @@ public class ImGroupServiceImpl implements ImGroupService {
         boolean isAdmin = false;
 
         if (!isAdmin) {
-            req.setOwnerId(req.getOperater());
+            req.setOwnerId(req.getOperator());
         }
 
         //1.判断群id是否存在
@@ -151,7 +150,7 @@ public class ImGroupServiceImpl implements ImGroupService {
 
         if (!isAdmin) {
             //不是后台调用需要检查权限
-            ResponseVO<GetRoleInGroupResp> role = groupMemberService.getRoleInGroupOne(req.getGroupId(), req.getOperater(), req.getAppId());
+            ResponseVO<GetRoleInGroupResp> role = groupMemberService.getRoleInGroupOne(req.getGroupId(), req.getOperator(), req.getAppId());
 
             if (!role.isOk()) {
                 return role;
@@ -250,7 +249,7 @@ public class ImGroupServiceImpl implements ImGroupService {
             }
 
             if (imGroupEntity.getGroupType() == GroupTypeEnum.PUBLIC.getCode() &&
-                    !imGroupEntity.getOwnerId().equals(req.getOperater())) {
+                    !imGroupEntity.getOwnerId().equals(req.getOperator())) {
                 throw new ApplicationException(GroupErrorCode.THIS_OPERATE_NEED_OWNER_ROLE);
             }
         }
@@ -269,7 +268,7 @@ public class ImGroupServiceImpl implements ImGroupService {
     @Transactional
     public ResponseVO transferGroup(TransferGroupReq req) {
 
-        ResponseVO<GetRoleInGroupResp> roleInGroupOne = groupMemberService.getRoleInGroupOne(req.getGroupId(), req.getOperater(), req.getAppId());
+        ResponseVO<GetRoleInGroupResp> roleInGroupOne = groupMemberService.getRoleInGroupOne(req.getGroupId(), req.getOperator(), req.getAppId());
         if (!roleInGroupOne.isOk()) {
             return roleInGroupOne;
         }
@@ -354,7 +353,7 @@ public class ImGroupServiceImpl implements ImGroupService {
 
         if (!isadmin) {
             //不是后台调用需要检查权限
-            ResponseVO<GetRoleInGroupResp> role = groupMemberService.getRoleInGroupOne(req.getGroupId(), req.getOperater(), req.getAppId());
+            ResponseVO<GetRoleInGroupResp> role = groupMemberService.getRoleInGroupOne(req.getGroupId(), req.getOperator(), req.getAppId());
 
             if (!role.isOk()) {
                 return role;

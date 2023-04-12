@@ -7,7 +7,7 @@ public class RequestBase {
 
     private Integer appId;
 
-    private String operater;
+    private String operator;
 
     private Integer clientType;
 

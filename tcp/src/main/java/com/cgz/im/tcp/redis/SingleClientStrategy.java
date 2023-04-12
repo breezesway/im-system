@@ -8,6 +8,9 @@ import org.redisson.client.codec.StringCodec;
 import org.redisson.config.Config;
 import org.redisson.config.SingleServerConfig;
 
+/**
+ * 单机模式
+ */
 public class SingleClientStrategy {
 
     public RedissonClient getRedissonClient(BootstrapConfig.RedisConfig redisConfig) {

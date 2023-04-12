@@ -11,6 +11,9 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 
+/**
+ * 暂时未用到
+ */
 @Slf4j
 public class MessageReceiver {
 

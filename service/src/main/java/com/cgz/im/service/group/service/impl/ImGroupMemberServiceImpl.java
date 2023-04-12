@@ -286,7 +286,7 @@ public class ImGroupMemberServiceImpl implements ImGroupMemberService {
             if (GroupTypeEnum.PUBLIC.getCode() == group.getGroupType()) {
 
                 //获取操作人的权限 是管理员or群主or群成员
-                ResponseVO<GetRoleInGroupResp> role = getRoleInGroupOne(req.getGroupId(), req.getOperater(), req.getAppId());
+                ResponseVO<GetRoleInGroupResp> role = getRoleInGroupOne(req.getGroupId(), req.getOperator(), req.getAppId());
                 if (!role.isOk()) {
                     return role;
                 }
@@ -361,7 +361,7 @@ public class ImGroupMemberServiceImpl implements ImGroupMemberService {
         }
 
         //是否是自己修改自己的资料
-        boolean isMeOperate = req.getOperater().equals(req.getMemberId());
+        boolean isMeOperate = req.getOperator().equals(req.getMemberId());
 
         if (!isadmin) {
             //昵称只能自己修改 权限只能群主或管理员修改
@@ -385,7 +385,7 @@ public class ImGroupMemberServiceImpl implements ImGroupMemberService {
                 }
 
                 //获取操作人权限
-                ResponseVO<GetRoleInGroupResp> operateRoleInGroupOne = this.getRoleInGroupOne(req.getGroupId(), req.getOperater(), req.getAppId());
+                ResponseVO<GetRoleInGroupResp> operateRoleInGroupOne = this.getRoleInGroupOne(req.getGroupId(), req.getOperator(), req.getAppId());
                 if (!operateRoleInGroupOne.isOk()) {
                     return operateRoleInGroupOne;
                 }
@@ -469,7 +469,7 @@ public class ImGroupMemberServiceImpl implements ImGroupMemberService {
         if (!isadmin) {
 
             //获取操作人的权限 是管理员or群主or群成员
-            ResponseVO<GetRoleInGroupResp> role = getRoleInGroupOne(req.getGroupId(), req.getOperater(), req.getAppId());
+            ResponseVO<GetRoleInGroupResp> role = getRoleInGroupOne(req.getGroupId(), req.getOperator(), req.getAppId());
             if (!role.isOk()) {
                 return role;
             }

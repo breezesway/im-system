@@ -24,9 +24,7 @@ public enum SystemCommand implements Command{
 
     private int command;
 
-    SystemCommand(int code){this.command = code;}
-
-    public int getCode(){return command;}
+    SystemCommand(int command){this.command = command;}
 
     @Override
     public int getCommand() {

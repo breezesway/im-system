@@ -12,8 +12,10 @@ public class RedisManager {
 
     public static void init(BootstrapConfig config){
         loginModel = config.getLim().getLoginModel();
+
         SingleClientStrategy singleClientStrategy = new SingleClientStrategy();
         redissonClient = singleClientStrategy.getRedissonClient(config.getLim().getRedis());
+
         UserLoginMessageListener userLoginMessageListener = new UserLoginMessageListener(loginModel);
         userLoginMessageListener.listenerUserLogin();
 
