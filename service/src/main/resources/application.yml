@@ -10,6 +10,13 @@ spring:
   application:
     name: im-core
 
+appConfig:
+  zkAddr: 127.0.0.1:2181 # zk连接地址
+  zkConnectTimeOut: 50000 #zk超时时间
+  imRouteWay: 3 #1.随机 2.轮询 3.一致性哈希
+  consistentHashWay: 1 #一致性哈希算法：1.TreeMap 2.自定义
+
+
 # logger 配置
 logging:
   config: classpath:logback-spring.xml

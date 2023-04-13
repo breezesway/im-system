@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @MapperScan("com.cgz.im.service.*.dao.mapper")
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"com.cgz.im.service","com.cgz.im.common"})
 public class ServiceApplication {
 
     public static void main(String[] args) {

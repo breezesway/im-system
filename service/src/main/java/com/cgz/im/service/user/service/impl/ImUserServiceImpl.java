@@ -7,10 +7,7 @@ import com.cgz.im.common.enums.UserErrorCode;
 import com.cgz.im.common.exception.ApplicationException;
 import com.cgz.im.service.user.dao.ImUserDataEntity;
 import com.cgz.im.service.user.dao.mapper.ImUserDataMapper;
-import com.cgz.im.service.user.model.req.DeleteUserReq;
-import com.cgz.im.service.user.model.req.GetUserInfoReq;
-import com.cgz.im.service.user.model.req.ImportUserReq;
-import com.cgz.im.service.user.model.req.ModifyUserInfoReq;
+import com.cgz.im.service.user.model.req.*;
 import com.cgz.im.service.user.model.resp.GetUserInfoResp;
 import com.cgz.im.service.user.model.resp.ImportUserResp;
 import com.cgz.im.service.user.service.ImUserService;
@@ -155,5 +152,10 @@ public class ImUserServiceImpl implements ImUserService {
             return ResponseVO.successResponse();
         }
         throw new ApplicationException(UserErrorCode.MODIFY_USER_ERROR);
+    }
+
+    @Override
+    public ResponseVO login(LoginReq req) {
+        return ResponseVO.successResponse();
     }
 }

@@ -2,10 +2,7 @@ package com.cgz.im.service.user.service;
 
 import com.cgz.im.common.ResponseVO;
 import com.cgz.im.service.user.dao.ImUserDataEntity;
-import com.cgz.im.service.user.model.req.DeleteUserReq;
-import com.cgz.im.service.user.model.req.GetUserInfoReq;
-import com.cgz.im.service.user.model.req.ImportUserReq;
-import com.cgz.im.service.user.model.req.ModifyUserInfoReq;
+import com.cgz.im.service.user.model.req.*;
 import com.cgz.im.service.user.model.resp.GetUserInfoResp;
 
 public interface ImUserService {
@@ -19,4 +16,7 @@ public interface ImUserService {
     ResponseVO deleteUser(DeleteUserReq req);
 
     ResponseVO modifyUserInfo(ModifyUserInfoReq req);
+
+    ResponseVO login(LoginReq req);
+
 }
