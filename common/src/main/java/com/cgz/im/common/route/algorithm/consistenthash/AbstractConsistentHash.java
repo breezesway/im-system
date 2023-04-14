@@ -1,6 +1,7 @@
 package com.cgz.im.common.route.algorithm.consistenthash;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -45,12 +46,8 @@ public abstract class AbstractConsistentHash {
             throw new RuntimeException("MD5 not supported", e);
         }
         md5.reset();
-        byte[] keyBytes = null;
-        try {
-            keyBytes = value.getBytes("UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("Unknown string :" + value, e);
-        }
+        byte[] keyBytes;
+        keyBytes = value.getBytes(StandardCharsets.UTF_8);
 
         md5.update(keyBytes);
         byte[] digest = md5.digest();
@@ -61,7 +58,6 @@ public abstract class AbstractConsistentHash {
                 | ((long) (digest[1] & 0xFF) << 8)
                 | (digest[0] & 0xFF);
 
-        long truncateHashCode = hashCode & 0xffffffffL;
-        return truncateHashCode;
+        return hashCode & 0xffffffffL;
     }
 }

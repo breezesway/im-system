@@ -2,6 +2,9 @@ package com.cgz.im.common.enums;
 
 import com.cgz.im.common.exception.ApplicationExceptionEnum;
 
+/**
+ * 用户错误代码，以20000开头
+ */
 public enum UserErrorCode implements ApplicationExceptionEnum {
 
     IMPORT_SIZE_TOO_LARGE(20000,"导入數量太大"),

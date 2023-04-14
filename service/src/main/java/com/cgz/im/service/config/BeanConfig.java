@@ -1,14 +1,10 @@
 package com.cgz.im.service.config;
 
-import com.cgz.im.common.cofig.AppConfig;
+import com.cgz.im.common.config.AppConfig;
 import com.cgz.im.common.enums.ImUrlRouteWayEnum;
 import com.cgz.im.common.enums.RouteHashMethodEnum;
 import com.cgz.im.common.route.RouterHandle;
 import com.cgz.im.common.route.algorithm.consistenthash.AbstractConsistentHash;
-import com.cgz.im.common.route.algorithm.consistenthash.ConsistentHashHandle;
-import com.cgz.im.common.route.algorithm.consistenthash.TreeMapConsistentHash;
-import com.cgz.im.common.route.algorithm.loop.LoopHandle;
-import com.cgz.im.common.route.algorithm.random.RandomHandle;
 import org.I0Itec.zkclient.ZkClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +18,9 @@ public class BeanConfig {
     @Autowired
     AppConfig appConfig;
 
+    /**
+     * 负载均衡
+     */
     @Bean
     public RouterHandle routerHandle() throws Exception{
         Integer imRouteWay = appConfig.getImRouteWay();
@@ -30,6 +29,7 @@ public class BeanConfig {
         routWay = handler.getClazz();
         RouterHandle o = (RouterHandle) Class.forName(routWay).newInstance();
         if(handler == ImUrlRouteWayEnum.CONSISTENT_HASH){
+            //如果负载均衡是一致性哈希，反射调用配置文件的具体算法
             Method setHash = Class.forName(routWay).getMethod("setHash", AbstractConsistentHash.class);
             Integer consistentHashWay = appConfig.getConsistentHashWay();
             String hashWay;

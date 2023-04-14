@@ -1,5 +1,8 @@
 package com.cgz.im.common.exception;
 
+/**
+ * 应用异常，继承自RuntimeException，传参传ApplicationExceptionEnum的实现类
+ */
 public class ApplicationException extends RuntimeException {
 
     private int code;

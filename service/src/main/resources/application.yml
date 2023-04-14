@@ -15,6 +15,20 @@ appConfig:
   zkConnectTimeOut: 50000 #zk超时时间
   imRouteWay: 3 #1.随机 2.轮询 3.一致性哈希
   consistentHashWay: 1 #一致性哈希算法：1.TreeMap 2.自定义
+  callbackUrl: http://127.0.0.1:8000/callback
+  modifyUserAfterCallback: false # 用户资料变更之后回调开关
+  addFriendAfterCallback: false # 添加好友之后回调开关
+  addFriendBeforeCallback: false # 添加好友之前回调开关
+  modifyFriendAfterCallback: false # 修改好友之后回调开关
+  deleteFriendAfterCallback: false # 删除好友之后回调开关
+  addFriendShipBlackAfterCallback: false #添加黑名单之后回调开关
+  deleteFriendShipBlackAfterCallback: false #删除黑名单之后回调开关
+  createGroupAfterCallback: false # 创建群聊之后回调开关
+  modifyGroupAfterCallback: false # 修改群聊之后回调开关
+  destroyGroupAfterCallback: false # 解散群聊之后回调开关
+  deleteGroupMemberAfterCallback: false # 删除群成员之后回调
+  addGroupMemberAfterCallback: false # 拉人入群之后回调
+  addGroupMemberBeforeCallback: false # 拉人入群之前回调
 
 
 # logger 配置

@@ -2,6 +2,9 @@ package com.cgz.im.common.enums;
 
 import com.cgz.im.common.exception.ApplicationExceptionEnum;
 
+/**
+ * 朋友关系错误代码，以30000开头
+ */
 public enum FriendShipErrorCode implements ApplicationExceptionEnum {
 
     IMPORT_SIZE_TOO_LARGE(30000,"导入數量超出上限"),

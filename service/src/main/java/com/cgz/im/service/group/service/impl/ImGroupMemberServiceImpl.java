@@ -1,10 +1,14 @@
 package com.cgz.im.service.group.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cgz.im.common.ResponseVO;
+import com.cgz.im.common.config.AppConfig;
+import com.cgz.im.common.constant.Constants;
 import com.cgz.im.common.enums.GroupErrorCode;
 import com.cgz.im.common.enums.GroupMemberRoleEnum;
 import com.cgz.im.common.enums.GroupStatusEnum;
@@ -13,6 +17,7 @@ import com.cgz.im.common.exception.ApplicationException;
 import com.cgz.im.service.group.dao.ImGroupEntity;
 import com.cgz.im.service.group.dao.ImGroupMemberEntity;
 import com.cgz.im.service.group.dao.mapper.ImGroupMemberMapper;
+import com.cgz.im.service.group.model.callback.AddMemberAfterCallback;
 import com.cgz.im.service.group.model.req.*;
 import com.cgz.im.service.group.model.resp.AddMemberResp;
 import com.cgz.im.service.group.model.resp.GetRoleInGroupResp;
@@ -20,6 +25,7 @@ import com.cgz.im.service.group.service.ImGroupMemberService;
 import com.cgz.im.service.group.service.ImGroupService;
 import com.cgz.im.service.user.dao.ImUserDataEntity;
 import com.cgz.im.service.user.service.ImUserService;
+import com.cgz.im.service.utils.CallbackService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -44,6 +50,12 @@ public class ImGroupMemberServiceImpl implements ImGroupMemberService {
 
     @Autowired
     ImUserService imUserService;
+
+    @Autowired
+    AppConfig appConfig;
+
+    @Autowired
+    CallbackService callbackService;
 
     @Override
     public ResponseVO importGroupMember(ImportGroupMemberReq req) {
@@ -231,6 +243,21 @@ public class ImGroupMemberServiceImpl implements ImGroupMemberService {
             return groupResp;
         }
 
+        List<GroupMemberDto> groupMemberDtos = req.getMembers();
+        if(appConfig.isAddGroupMemberBeforeCallback()){
+            ResponseVO responseVO = callbackService.beforeCallback(req.getAppId(),
+                    Constants.CallbackCommand.GroupMemberAddBefore,
+                    JSONObject.toJSONString(req));
+            if(!responseVO.isOk()){
+                return responseVO;
+            }
+            try {
+                groupMemberDtos = JSONArray.parseArray(JSONObject.toJSONString(responseVO.getData()), GroupMemberDto.class);
+            }catch (Exception e){
+                log.error("GroupMemberAddBefore 回调失败: {}",req.getAppId());
+            }
+        }
+
         List<GroupMemberDto> memberDtos = req.getMembers();
 
         ImGroupEntity group = groupResp.getData();
@@ -266,6 +293,17 @@ public class ImGroupMemberServiceImpl implements ImGroupMemberService {
                 addMemberResp.setResultMessage(responseVO.getMsg());
             }
             resp.add(addMemberResp);
+        }
+
+        if(appConfig.isAddGroupMemberAfterCallback()){
+            AddMemberAfterCallback dto = new AddMemberAfterCallback();
+            dto.setGroupId(req.getGroupId());
+            dto.setGroupType(group.getGroupType());
+            dto.setMemberId(resp);
+            dto.setOperator(req.getOperator());
+            callbackService.callback(req.getAppId(),
+                    Constants.CallbackCommand.GroupMemberAddAfter,
+                    JSONObject.toJSONString(dto));
         }
 
         return ResponseVO.successResponse(resp);
@@ -326,6 +364,13 @@ public class ImGroupMemberServiceImpl implements ImGroupMemberService {
             }
         }
         ResponseVO responseVO = groupMemberService.removeGroupMember(req.getGroupId(), req.getAppId(), req.getMemberId());
+        if(responseVO.isOk()){
+            if(appConfig.isDeleteGroupMemberAfterCallback()){
+                callbackService.callback(req.getAppId(),
+                        Constants.CallbackCommand.GroupMemberDeleteAfter,
+                        JSONObject.toJSONString(req));
+            }
+        }
         return responseVO;
     }
 

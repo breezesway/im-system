@@ -2,6 +2,9 @@ package com.cgz.im.common.enums;
 
 import com.cgz.im.common.exception.ApplicationExceptionEnum;
 
+/**
+ * 群组错误代码，以40000开头
+ */
 public enum GroupErrorCode implements ApplicationExceptionEnum {
 
     GROUP_IS_NOT_EXIST(40000,"群不存在"),
