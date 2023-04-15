@@ -35,6 +35,10 @@ public class SessionSocketHolder {
         userClientDto.setImei(imei);
         userClientDto.setUserId(userId);
         CHANNELS.put(userClientDto, channel);
+        CHANNELS.forEach((k,v)->{
+            System.out.println("put"+k.toString());
+            System.out.println("put"+v.toString());
+        });
     }
 
     /**
@@ -46,6 +50,15 @@ public class SessionSocketHolder {
         userClientDto.setClientType(clientType);
         userClientDto.setImei(imei);
         userClientDto.setUserId(userId);
+        System.out.println(userClientDto);
+        CHANNELS.forEach((k,v)->{
+            if(k.equals(userClientDto)){
+                System.out.println("相等");
+            }
+            System.out.println("get:"+ k);
+            System.out.println("get:"+v.toString());
+        });
+        System.out.println("get:"+CHANNELS.get(userClientDto));
         return CHANNELS.get(userClientDto);
     }
 

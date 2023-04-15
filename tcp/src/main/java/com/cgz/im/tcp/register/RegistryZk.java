@@ -33,6 +33,6 @@ public class RegistryZk implements Runnable {
 
         String webPath = Constants.ImCoreZkRoot + Constants.ImCoreZkRootWeb + "/" + ip + ":" + tcpConfig.getWebSocketPort();
         zKit.createNode(webPath);
-        logger.info("Registry zookeeper webPath success, msg=[{}]", tcpPath);
+        logger.info("Registry zookeeper webPath success, msg=[{}]", webPath);
     }
 }

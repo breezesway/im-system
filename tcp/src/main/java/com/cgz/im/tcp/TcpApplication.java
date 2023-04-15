@@ -24,7 +24,6 @@ public class TcpApplication {
     }
 
     private static void start(String path) {
-
         try {
             //读取yml配置文件
             Yaml yaml = new Yaml();
@@ -44,7 +43,6 @@ public class TcpApplication {
             e.printStackTrace();
             System.exit(500);
         }
-
     }
 
     public static void registerZk(BootstrapConfig config) throws UnknownHostException {

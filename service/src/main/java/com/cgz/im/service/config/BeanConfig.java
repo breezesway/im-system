@@ -30,7 +30,7 @@ public class BeanConfig {
         RouterHandle o = (RouterHandle) Class.forName(routWay).newInstance();
         if(handler == ImUrlRouteWayEnum.CONSISTENT_HASH){
             //如果负载均衡是一致性哈希，反射调用配置文件的具体算法
-            Method setHash = Class.forName(routWay).getMethod("setHash", AbstractConsistentHash.class);
+            Method setHash = Class.forName(routWay).getMethod("setConsistentHash", AbstractConsistentHash.class);
             Integer consistentHashWay = appConfig.getConsistentHashWay();
             String hashWay;
             RouteHashMethodEnum hashHandler = RouteHashMethodEnum.getHandler(consistentHashWay);

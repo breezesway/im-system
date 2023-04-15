@@ -2,11 +2,13 @@ package com.cgz.im.service.user.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.cgz.im.codec.pack.user.UserModifyPack;
 import com.cgz.im.common.ResponseVO;
 import com.cgz.im.common.config.AppConfig;
 import com.cgz.im.common.constant.Constants;
 import com.cgz.im.common.enums.DelFlagEnum;
 import com.cgz.im.common.enums.UserErrorCode;
+import com.cgz.im.common.enums.command.UserEventCommand;
 import com.cgz.im.common.exception.ApplicationException;
 import com.cgz.im.service.user.dao.ImUserDataEntity;
 import com.cgz.im.service.user.dao.mapper.ImUserDataMapper;
@@ -15,6 +17,7 @@ import com.cgz.im.service.user.model.resp.GetUserInfoResp;
 import com.cgz.im.service.user.model.resp.ImportUserResp;
 import com.cgz.im.service.user.service.ImUserService;
 import com.cgz.im.service.utils.CallbackService;
+import com.cgz.im.service.utils.MessageProducer;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +38,9 @@ public class ImUserServiceImpl implements ImUserService {
 
     @Autowired
     CallbackService callbackService;
+
+    @Autowired
+    MessageProducer messageProducer;
 
     @Override
     public ResponseVO importUser(ImportUserReq req) {
@@ -159,6 +165,17 @@ public class ImUserServiceImpl implements ImUserService {
         update.setUserId(null);
         int update1 = imUserDataMapper.update(update, query);
         if(update1 == 1){
+
+            UserModifyPack pack = new UserModifyPack();
+            BeanUtils.copyProperties(req,pack);
+            System.out.println("modifyUserInfo发送消息");
+            messageProducer.sendToUser(req.getUserId(),
+                    req.getClientType(),
+                    req.getImei(),
+                    UserEventCommand.USER_MODIFY,
+                    pack,
+                    req.getAppId());
+
             if (appConfig.isModifyUserAfterCallback()){
                 callbackService.callback(req.getAppId(),
                         Constants.CallbackCommand.ModifyUserAfter,

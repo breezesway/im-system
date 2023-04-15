@@ -4,13 +4,48 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     password: 123456
-    url: jdbc:mysql://127.0.0.1:3306/im?serverTimezone=UTC&useSSL=false&characterEncoding=UTF8
+    url: jdbc:mysql://127.0.0.1:3306/im?serverTimezone=UTC&useSSL=false&characterEncoding=UTF8&allowPublicKeyRetrieval=true
     username: root
+
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    jedis:
+      pool:
+        max-active: 100
+        max-idle: 100
+        max-wait: 1000
+        min-idle: 10
+    password:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    addresses: localhost
+    username: guest
+    password: guest
+    #    virtual-host:
+    listener:
+      simple:
+        concurrency: 5
+        max-concurrency: 10
+        acknowledge-mode: MANUAL
+        prefetch: 1
+    publisher-confirms: true
+    publisher-returns: true
+    template:
+      mandatory: true
+    cache:
+      connection:
+        mode: channel
+      channel:
+        size: 36
+        checkout-timeout: 0
 
   application:
     name: im-core
 
 appConfig:
+  privateKey: 123456
   zkAddr: 127.0.0.1:2181 # zk连接地址
   zkConnectTimeOut: 50000 #zk超时时间
   imRouteWay: 3 #1.随机 2.轮询 3.一致性哈希

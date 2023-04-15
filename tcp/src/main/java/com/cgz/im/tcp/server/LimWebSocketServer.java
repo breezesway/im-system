@@ -3,6 +3,7 @@ package com.cgz.im.tcp.server;
 import com.cgz.im.codec.WebSocketMessageDecoder;
 import com.cgz.im.codec.WebSocketMessageEncoder;
 import com.cgz.im.codec.config.BootstrapConfig;
+import com.cgz.im.tcp.handler.NettyServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -60,7 +61,7 @@ public class LimWebSocketServer {
                         pipeline.addLast(new WebSocketServerProtocolHandler("/ws"));
                         pipeline.addLast(new WebSocketMessageDecoder());
                         pipeline.addLast(new WebSocketMessageEncoder());
-                        //pipeline.addLast(new NettyServerHandler(config.getBrokerId(),config.getLogicUrl()));
+                        pipeline.addLast(new NettyServerHandler(config.getBrokerId()));//,config.getLogicUrl()
                     }
                 });
     }
