@@ -20,6 +20,10 @@ public class AppConfig {
     /** 负载均衡策略*/
     private Integer imRouteWay;
 
+    private boolean sendMessageCheckFriend;
+
+    private boolean sendMessageCheckBlack;
+
     /** 一致性哈希具体的哈希算法实现*/
     private Integer consistentHashWay;
 

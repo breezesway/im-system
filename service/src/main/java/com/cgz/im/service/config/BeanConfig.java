@@ -5,6 +5,7 @@ import com.cgz.im.common.enums.ImUrlRouteWayEnum;
 import com.cgz.im.common.enums.RouteHashMethodEnum;
 import com.cgz.im.common.route.RouterHandle;
 import com.cgz.im.common.route.algorithm.consistenthash.AbstractConsistentHash;
+import com.cgz.im.service.utils.SnowflakeIdWorker;
 import org.I0Itec.zkclient.ZkClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -45,6 +46,16 @@ public class BeanConfig {
     @Bean
     public ZkClient buildZKClient(){
         return new ZkClient(appConfig.getZkAddr(), appConfig.getZkConnectTimeOut());
+    }
+
+    @Bean
+    public EasySqlInjector easySqlInjector () {
+        return new EasySqlInjector();
+    }
+
+    @Bean
+    public SnowflakeIdWorker buildSnowflakeSeq() throws Exception {
+        return new SnowflakeIdWorker(0);
     }
 
 }

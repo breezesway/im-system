@@ -44,7 +44,7 @@ public class GateWayInterceptor implements HandlerInterceptor {
             resp(ResponseVO.errorResponse(applicationExceptionEnum),response);
             return false;
         }
-        return false;
+        return true;
     }
 
     private void resp(ResponseVO responseVO, HttpServletResponse response){

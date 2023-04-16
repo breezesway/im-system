@@ -39,10 +39,7 @@ public class SigAPI {
     }
 
     /**
-     * @description: 解密方法
-     * @param
-     * @return com.alibaba.fastjson.JSONObject
-     * @author lld
+     * 解密方法
      */
     public static JSONObject decodeUserSig(String userSig) {
         JSONObject sigDoc = new JSONObject(true);
@@ -65,7 +62,6 @@ public class SigAPI {
 
     /**
      * 解压缩
-     *
      * @param data 待压缩的数据
      * @return byte[] 解压缩后的数据
      */

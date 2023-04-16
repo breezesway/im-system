@@ -2,6 +2,7 @@ package com.cgz.im.service.group.controller;
 
 import com.cgz.im.common.ResponseVO;
 import com.cgz.im.service.group.model.req.*;
+import com.cgz.im.service.group.service.GroupMessageService;
 import com.cgz.im.service.group.service.ImGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -15,6 +16,9 @@ public class ImGroupController {
 
     @Autowired
     ImGroupService groupService;
+
+    @Autowired
+    GroupMessageService groupMessageService;
 
     @RequestMapping("/importGroup")
     public ResponseVO importGroup(@RequestBody @Validated ImportGroupReq req, Integer appId, String identifier)  {
@@ -72,4 +76,10 @@ public class ImGroupController {
         return groupService.muteGroup(req);
     }
 
+    @RequestMapping("/sendMessage")
+    public ResponseVO sendMessage(@RequestBody @Validated SendGroupMessageReq req, Integer appId, String identifier)  {
+        req.setAppId(appId);
+        req.setOperator(identifier);
+        return ResponseVO.successResponse(groupMessageService.send(req));
+    }
 }

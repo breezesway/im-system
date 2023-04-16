@@ -50,6 +50,8 @@ appConfig:
   zkConnectTimeOut: 50000 #zk超时时间
   imRouteWay: 3 #1.随机 2.轮询 3.一致性哈希
   consistentHashWay: 1 #一致性哈希算法：1.TreeMap 2.自定义
+  sendMessageCheckFriend: true
+  sendMessageCheckBlack: true
   callbackUrl: http://127.0.0.1:8000/callback
   modifyUserAfterCallback: false # 用户资料变更之后回调开关
   addFriendAfterCallback: false # 添加好友之后回调开关

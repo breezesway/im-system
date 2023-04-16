@@ -7,12 +7,15 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-//@Configuration
+@Configuration
 public class WebConfig implements WebMvcConfigurer {
 
     @Autowired
     GateWayInterceptor gateWayInterceptor;
 
+    /**
+     * 添加拦截器
+     */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(gateWayInterceptor)
@@ -21,6 +24,9 @@ public class WebConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/v1/message/checkSend");
     }
 
+    /**
+     * 跨域
+     */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")

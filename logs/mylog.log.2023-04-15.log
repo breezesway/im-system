@@ -754,3 +754,74 @@ java.sql.SQLNonTransientConnectionException: Public Key Retrieval is not allowed
 2023-04-15 17:16:36 -Shutting down ExecutorService 'applicationTaskExecutor'
 2023-04-15 17:16:36 -HikariPool-1 - Shutdown initiated...
 2023-04-15 17:16:36 -HikariPool-1 - Shutdown completed.
+2023-04-15 22:40:15 -Starting ServiceApplication on DESKTOP-NI2BAP4 with PID 14752 (E:\IDEAWorkP\im-system\service\target\classes started by MasterCai in E:\IDEAWorkP\im-system)
+2023-04-15 22:40:15 -The following profiles are active: dev
+2023-04-15 22:40:15 -Multiple Spring Data modules found, entering strict repository configuration mode!
+2023-04-15 22:40:15 -Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2023-04-15 22:40:15 -Finished Spring Data repository scanning in 14ms. Found 0 Redis repository interfaces.
+2023-04-15 22:40:16 -Tomcat initialized with port(s): 8000 (http)
+2023-04-15 22:40:16 -Initializing ProtocolHandler ["http-nio-8000"]
+2023-04-15 22:40:16 -Starting service [Tomcat]
+2023-04-15 22:40:16 -Starting Servlet engine: [Apache Tomcat/9.0.37]
+2023-04-15 22:40:16 -Loaded Apache Tomcat Native library [1.2.30] using APR version [1.7.0].
+2023-04-15 22:40:16 -APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true].
+2023-04-15 22:40:16 -APR/OpenSSL configuration: useAprConnector [false], useOpenSSL [true]
+2023-04-15 22:40:16 -OpenSSL successfully initialized [OpenSSL 1.1.1k  25 Mar 2021]
+2023-04-15 22:40:16 -Initializing Spring embedded WebApplicationContext
+2023-04-15 22:40:16 -Root WebApplicationContext: initialization completed in 977 ms
+2023-04-15 22:40:18 -Initializing ExecutorService 'applicationTaskExecutor'
+2023-04-15 22:40:18 -Starting ProtocolHandler ["http-nio-8000"]
+2023-04-15 22:40:18 -Tomcat started on port(s): 8000 (http) with context path ''
+2023-04-15 22:40:18 -Attempting to connect to: [localhost:5672]
+2023-04-15 22:40:18 -Created new connection: rabbitConnectionFactory#2b7facc7:0/SimpleConnection@4d065e1a [delegate=amqp://guest@127.0.0.1:5672/, localPort= 61420]
+2023-04-15 22:40:18 -Started ServiceApplication in 3.836 seconds (JVM running for 4.8)
+2023-04-15 22:45:20 -chat msg from queue :: {"toId":"cgz4","clientType":1,"messageBody":"123","appId":10000,"messageId":"7533784d-5d97-44d3-aeca-5a95ff3a7a2a","imei":"1000","fromId":"cgz5","command":1103}
+2023-04-15 22:45:20 -HikariPool-1 - Starting...
+2023-04-15 22:45:20 -HikariPool-1 - Start completed.
+2023-04-15 22:45:20 -msg ack,msgId=7533784d-5d97-44d3-aeca-5a95ff3a7a2a,checkResult30008
+2023-04-15 22:45:22 -send message == {"appId":10000,"clientType":1,"command":1046,"data":{"msg":"关系链记录不存在","code":30008,"data":{"messageId":"7533784d-5d97-44d3-aeca-5a95ff3a7a2a"},"ok":false},"imei":"1000","toId":"cgz5"}
+2023-04-15 22:46:09 -chat msg from queue :: {"toId":"cgz6","clientType":1,"messageBody":"123","appId":10000,"messageId":"4d9c624b-aff0-4643-bf61-357f22ac7e7c","imei":"1000","fromId":"cgz5","command":1103}
+2023-04-15 22:46:09 -msg ack,msgId=4d9c624b-aff0-4643-bf61-357f22ac7e7c,checkResult30008
+2023-04-15 22:46:09 -send message == {"appId":10000,"clientType":1,"command":1046,"data":{"msg":"关系链记录不存在","code":30008,"data":{"messageId":"4d9c624b-aff0-4643-bf61-357f22ac7e7c"},"ok":false},"imei":"1000","toId":"cgz5"}
+2023-04-15 22:47:08 -chat msg from queue :: {"toId":"cgz7","clientType":1,"messageBody":"123","appId":10000,"messageId":"b87fbb88-03ff-49e4-9488-ada4c046fff9","imei":"1000","fromId":"cgz5","command":1103}
+2023-04-15 22:47:08 -msg ack,msgId=b87fbb88-03ff-49e4-9488-ada4c046fff9,checkResult30008
+2023-04-15 22:47:08 -send message == {"appId":10000,"clientType":1,"command":1046,"data":{"msg":"关系链记录不存在","code":30008,"data":{"messageId":"b87fbb88-03ff-49e4-9488-ada4c046fff9"},"ok":false},"imei":"1000","toId":"cgz5"}
+2023-04-15 22:47:15 -chat msg from queue :: {"toId":"cgz5","clientType":1,"messageBody":"123","appId":10000,"messageId":"9f2b6b80-8bb4-470d-8f1b-8218d8ae29be","imei":"1000","fromId":"cgz7","command":1103}
+2023-04-15 22:47:15 -msg ack,msgId=9f2b6b80-8bb4-470d-8f1b-8218d8ae29be,checkResult30008
+2023-04-15 22:47:15 -send message == {"appId":10000,"clientType":1,"command":1046,"data":{"msg":"关系链记录不存在","code":30008,"data":{"messageId":"9f2b6b80-8bb4-470d-8f1b-8218d8ae29be"},"ok":false},"imei":"1000","toId":"cgz7"}
+2023-04-15 22:50:15 -chat msg from queue :: {"toId":"cgz7","clientType":1,"messageBody":"123","appId":10000,"messageId":"b4926116-7099-4f0f-8b95-3db4229379b8","imei":"1000","fromId":"cgz5","command":1103}
+2023-04-15 22:50:15 -msg ack,msgId=b4926116-7099-4f0f-8b95-3db4229379b8,checkResult30008
+2023-04-15 22:50:15 -send message == {"appId":10000,"clientType":1,"command":1046,"data":{"msg":"关系链记录不存在","code":30008,"data":{"messageId":"b4926116-7099-4f0f-8b95-3db4229379b8"},"ok":false},"imei":"1000","toId":"cgz5"}
+2023-04-15 22:51:12 -chat msg from queue :: {"toId":"cgz7","clientType":1,"messageBody":"123","appId":10000,"messageId":"414f5a60-5813-43d9-851f-05dd367d16e0","imei":"1000","fromId":"cgz5","command":1103}
+2023-04-15 22:51:12 -msg ack,msgId=414f5a60-5813-43d9-851f-05dd367d16e0,checkResult30004
+2023-04-15 22:51:12 -send message == {"appId":10000,"clientType":1,"command":1046,"data":{"msg":"好友已被删除","code":30004,"data":{"messageId":"414f5a60-5813-43d9-851f-05dd367d16e0"},"ok":false},"imei":"1000","toId":"cgz5"}
+2023-04-15 22:51:16 -chat msg from queue :: {"toId":"cgz5","clientType":1,"messageBody":"123","appId":10000,"messageId":"1117bf6a-fd08-4a33-92e7-9a89d088b2a0","imei":"1000","fromId":"cgz7","command":1103}
+2023-04-15 22:51:16 -处理消息出现异常：null
+2023-04-15 22:51:16 -RMQ_CHAT_TRAN_ERROR
+java.lang.NullPointerException: null
+	at com.cgz.im.service.message.service.CheckSendMessageService.checkFriendShip(CheckSendMessageService.java:76)
+	at com.cgz.im.service.message.service.P2PMessageService.imServerPermissionCheck(P2PMessageService.java:78)
+	at com.cgz.im.service.message.service.P2PMessageService.process(P2PMessageService.java:31)
+	at com.cgz.im.service.message.mq.ChatOperateReceiver.onChatMessage(ChatOperateReceiver.java:54)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.messaging.handler.invocation.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:171)
+	at org.springframework.messaging.handler.invocation.InvocableHandlerMethod.invoke(InvocableHandlerMethod.java:120)
+	at org.springframework.amqp.rabbit.listener.adapter.HandlerAdapter.invoke(HandlerAdapter.java:53)
+	at org.springframework.amqp.rabbit.listener.adapter.MessagingMessageListenerAdapter.invokeHandler(MessagingMessageListenerAdapter.java:220)
+	at org.springframework.amqp.rabbit.listener.adapter.MessagingMessageListenerAdapter.invokeHandlerAndProcessResult(MessagingMessageListenerAdapter.java:148)
+	at org.springframework.amqp.rabbit.listener.adapter.MessagingMessageListenerAdapter.onMessage(MessagingMessageListenerAdapter.java:133)
+	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.doInvokeListener(AbstractMessageListenerContainer.java:1591)
+	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.actualInvokeListener(AbstractMessageListenerContainer.java:1510)
+	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.invokeListener(AbstractMessageListenerContainer.java:1498)
+	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.doExecuteListener(AbstractMessageListenerContainer.java:1489)
+	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.executeListener(AbstractMessageListenerContainer.java:1433)
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer.doReceiveAndExecute(SimpleMessageListenerContainer.java:970)
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer.receiveAndExecute(SimpleMessageListenerContainer.java:916)
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer.access$1600(SimpleMessageListenerContainer.java:83)
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.mainLoop(SimpleMessageListenerContainer.java:1291)
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.run(SimpleMessageListenerContainer.java:1197)
+	at java.lang.Thread.run(Thread.java:748)
+2023-04-15 22:51:16 -NACK_MSG:{"toId":"cgz5","clientType":1,"messageBody":"123","appId":10000,"messageId":"1117bf6a-fd08-4a33-92e7-9a89d088b2a0","imei":"1000","fromId":"cgz7","command":1103}

@@ -32,8 +32,11 @@ public class IdentityCheck {
     StringRedisTemplate stringRedisTemplate;
 
     public ApplicationExceptionEnum checkUserSig(String identifier,String appId,String userSig){
-        String cacheUserSig = stringRedisTemplate.opsForValue().get(appId + ":" + Constants.RedisConstants.userSign + ":" + identifier + userSig);
-        if(StringUtils.isBlank(cacheUserSig) && Long.valueOf(cacheUserSig)>System.currentTimeMillis()/1000){
+        String cacheUserSig = stringRedisTemplate.opsForValue()
+                .get(appId + ":" + Constants.RedisConstants.userSign + ":"
+                        + identifier + userSig);
+        if(!StringUtils.isBlank(cacheUserSig) && Long.valueOf(cacheUserSig) > System.currentTimeMillis() / 1000){
+            //this.setIsAdmin(identifier,Integer.valueOf(appId));
             return BaseErrorCode.SUCCESS;
         }
         //获取密钥
