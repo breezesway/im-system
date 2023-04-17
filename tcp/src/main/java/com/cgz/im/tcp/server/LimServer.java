@@ -50,7 +50,7 @@ public class LimServer {
                         pipeline.addLast(new MessageEncoder());
                         //pipeline.addLast(new IdleStateHandler(0,0,1));//超时检测，会调用下一个handler的userenventtrigger
                         pipeline.addLast(new HeartBeatHandler(config.getHeartBeatTime()));
-                        pipeline.addLast(new NettyServerHandler(config.getBrokerId()));
+                        pipeline.addLast(new NettyServerHandler(config.getBrokerId(), config.getLogicUrl()));
                     }
                 });
     }

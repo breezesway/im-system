@@ -1,6 +1,7 @@
 package com.cgz.im.service.message.controller;
 
 import com.cgz.im.common.ResponseVO;
+import com.cgz.im.common.model.message.CheckSendMessageReq;
 import com.cgz.im.service.message.model.req.SendMessageReq;
 import com.cgz.im.service.message.service.P2PMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +26,14 @@ public class MessageController {
         return ResponseVO.successResponse(p2PMessageService.send(req));
     }
 
-    /*@RequestMapping("/checkSend")
+    @RequestMapping("/checkSend")
     public ResponseVO checkSend(@RequestBody @Validated CheckSendMessageReq req)  {
-        return p2PMessageService.imServerPermissionCheck(req.getFromId(),req.getToId()
-                ,req.getAppId());
+        return p2PMessageService.imServerPermissionCheck(req.getFromId(),
+                req.getToId(),
+                req.getAppId());
     }
 
-    @RequestMapping("/syncOfflineMessage")
+    /*@RequestMapping("/syncOfflineMessage")
     public ResponseVO syncOfflineMessage(@RequestBody
                                          @Validated SyncReq req, Integer appId)  {
         req.setAppId(appId);

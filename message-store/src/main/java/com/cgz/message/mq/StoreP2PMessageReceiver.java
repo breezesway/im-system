@@ -1,11 +1,11 @@
-package com.cgz.im.service.message.mq;
+package com.cgz.message.mq;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.cgz.im.common.constant.Constants;
-import com.cgz.im.common.enums.command.MessageCommand;
-import com.cgz.im.common.model.message.MessageContent;
-import com.cgz.im.service.message.service.P2PMessageService;
+import com.cgz.message.dao.ImMessageBodyEntity;
+import com.cgz.message.model.DoStoreP2PMessageDto;
+import com.cgz.message.service.StoreMessageService;
 import com.rabbitmq.client.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,41 +18,37 @@ import org.springframework.amqp.support.AmqpHeaders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.Headers;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
-/**
- * im服务投递给我们的消息
- */
-@Component
-public class ChatOperateReceiver {
+@Service
+public class StoreP2PMessageReceiver {
 
-    private static Logger logger = LoggerFactory.getLogger(ChatOperateReceiver.class);
+    private static Logger logger = LoggerFactory.getLogger(StoreP2PMessageReceiver.class);
 
     @Autowired
-    P2PMessageService p2PMessageService;
+    StoreMessageService storeMessageService;
 
     @RabbitListener(
             bindings = @QueueBinding(
-                    value = @Queue(value = Constants.RabbitConstants.Im2MessageService,durable = "true"),
-                    exchange = @Exchange(value = Constants.RabbitConstants.Im2MessageService,durable = "true")
+                    value = @Queue(value = Constants.RabbitConstants.StoreP2PMessage,durable = "true"),
+                    exchange = @Exchange(value = Constants.RabbitConstants.StoreP2PMessage,durable = "true")
             ),concurrency = "1"
     )
-    public void onChatMessage(@Payload Message message, @Headers Map<System,Object> headers,
+    public void onChatMessage(@Payload Message message,
+                              @Headers Map<String,Object> headers,
                               Channel channel) throws Exception {
         String msg = new String(message.getBody(), StandardCharsets.UTF_8);
-        logger.info("chat msg from queue :: {}",msg);
+        logger.info("CHAT MSG FORM QUEUE :: {}", msg);
         Long deliveryTag = (Long) headers.get(AmqpHeaders.DELIVERY_TAG);
         try {
             JSONObject jsonObject = JSON.parseObject(msg);
-            Integer command = jsonObject.getInteger("command");
-            if(command.equals(MessageCommand.MSG_P2P.getCommand())){
-                //处理消息
-                MessageContent messageContent = jsonObject.toJavaObject(MessageContent.class);
-                p2PMessageService.process(messageContent);
-            }
+            DoStoreP2PMessageDto doStoreP2PMessageDto = jsonObject.toJavaObject(DoStoreP2PMessageDto.class);
+            ImMessageBodyEntity messageBody = jsonObject.getObject("messageBody", ImMessageBodyEntity.class);
+            doStoreP2PMessageDto.setImMessageBodyEntity(messageBody);
+            storeMessageService.doStoreP2PMessage(doStoreP2PMessageDto);
             channel.basicAck(deliveryTag, false);
         }catch (Exception e){
             logger.error("处理消息出现异常：{}", e.getMessage());
@@ -61,5 +57,6 @@ public class ChatOperateReceiver {
             //第一个false 表示不批量拒绝，第二个false表示不重回队列
             channel.basicNack(deliveryTag, false, false);
         }
+
     }
 }

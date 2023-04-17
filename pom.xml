@@ -19,6 +19,7 @@
     <modules>
         <module>common</module>
         <module>service</module>
+        <module>message-store</module>
     </modules>
 
     <properties>

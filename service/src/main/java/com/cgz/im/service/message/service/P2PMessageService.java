@@ -14,6 +14,12 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+
 @Service
 public class P2PMessageService {
 
@@ -28,26 +34,46 @@ public class P2PMessageService {
     @Autowired
     MessageStoreService messageStoreService;
 
+    private final ThreadPoolExecutor threadPoolExecutor;
+
+    {
+        AtomicInteger num = new AtomicInteger(0);
+
+        threadPoolExecutor = new ThreadPoolExecutor(8, 8, 60, TimeUnit.SECONDS,
+                new LinkedBlockingQueue<>(1000), new ThreadFactory() {
+            @Override
+            public Thread newThread(Runnable r) {
+                Thread thread = new Thread(r);
+                thread.setDaemon(true);
+                thread.setName("message-process-thread-" + num.getAndIncrement());
+                return thread;
+            }
+        });
+    }
+
+
     public void process(MessageContent messageContent){
         String fromId = messageContent.getFromId();
         String toId = messageContent.getToId();
         Integer appId = messageContent.getAppId();
         //前置校验，这个用户是否被禁言、是否被禁用
         //发送方和接收方是否是好友
-        ResponseVO responseVO = imServerPermissionCheck(fromId, toId, messageContent);
-        if(responseVO.isOk()){
-            //插入数据
-            messageStoreService.storeP2PMessage(messageContent);
-            //1.回ack给自己
-            ack(messageContent,responseVO);
-            //2.发消息给同步在线端
-            syncToSender(messageContent,messageContent);
-            //3.发消息给对方在线端
-            dispatchMessage(messageContent);
-        }else{
+        /*ResponseVO responseVO = imServerPermissionCheck(fromId, toId, appId);
+        if(responseVO.isOk()){*/
+            threadPoolExecutor.execute(()->{
+                //插入数据
+                messageStoreService.storeP2PMessage(messageContent);
+                //1.回ack给自己
+                ack(messageContent,ResponseVO.successResponse());
+                //2.发消息给同步在线端
+                syncToSender(messageContent,messageContent);
+                //3.发消息给对方在线端
+                dispatchMessage(messageContent);
+            });
+        /*}else{
             //告诉客户端失败了
             ack(messageContent,responseVO);
-        }
+        }*/
         //回ack
     }
 
@@ -75,13 +101,13 @@ public class P2PMessageService {
                 messageContent);
     }
 
-    private ResponseVO imServerPermissionCheck(String fromId, String toId,
-                                               MessageContent messageContent){
-        ResponseVO responseVO = checkSendMessageService.checkSenderForbidAndMute(fromId, messageContent.getAppId());
+    public ResponseVO imServerPermissionCheck(String fromId, String toId,
+                                               Integer appId){
+        ResponseVO responseVO = checkSendMessageService.checkSenderForbidAndMute(fromId, appId);
         if(!responseVO.isOk()){
             return responseVO;
         }
-        responseVO = checkSendMessageService.checkFriendShip(fromId, toId, messageContent.getAppId());
+        responseVO = checkSendMessageService.checkFriendShip(fromId, toId, appId);
         return responseVO;
     }
 
