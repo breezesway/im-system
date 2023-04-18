@@ -66,6 +66,24 @@ appConfig:
   deleteGroupMemberAfterCallback: false # 删除群成员之后回调
   addGroupMemberAfterCallback: false # 拉人入群之后回调
   addGroupMemberBeforeCallback: false # 拉人入群之前回调
+  appId: 10000
+  tcpPort: 9000 # tcp端口
+  webSocketPort: 19000 # webSocket端口
+  needWebSocket: true #是否需要开启webSocket
+  loginModel: 1
+  messageRecallTimeOut: 1200000000 #消息可撤回时间，单位毫秒
+  #  *                多端同步模式：1 只允许一端在线，手机/电脑/web 踢掉除了本client+imel的设备
+  #  *                            2 允许手机/电脑的一台设备 + web在线 踢掉除了本client+imel的非web端设备
+  #  *                            3 允许手机和电脑单设备 + web 同时在线 踢掉非本client+imel的同端设备
+  #  *                            4 允许所有端多设备登录 不踢任何设备
+  groupMaxMemberCount: 500
+  sendMessageAfterCallback: false # 发送单聊消息之后
+  sendMessageBeforeCallback: false # 发送单聊消息之前
+  sendGroupMessageAfterCallback: false # 发送群聊消息之后
+  sendGroupMessageBeforeCallback: false # 发送群聊消息之前
+  offlineMessageCount: 1000 #离线消息存储条数
+  deleteConversationSyncMode: 1 #1多段同步
+
 
 
 # logger 配置

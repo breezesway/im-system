@@ -5,6 +5,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.cgz.im.common.constant.Constants;
 import com.cgz.im.common.enums.command.MessageCommand;
 import com.cgz.im.common.model.message.MessageContent;
+import com.cgz.im.common.model.message.MessageReadedContent;
+import com.cgz.im.common.model.message.MessageReceiveAckContent;
+import com.cgz.im.service.message.service.MessageSyncService;
 import com.cgz.im.service.message.service.P2PMessageService;
 import com.rabbitmq.client.Channel;
 import org.slf4j.Logger;
@@ -34,6 +37,9 @@ public class ChatOperateReceiver {
     @Autowired
     P2PMessageService p2PMessageService;
 
+    @Autowired
+    MessageSyncService messageSyncService;
+
     @RabbitListener(
             bindings = @QueueBinding(
                     value = @Queue(value = Constants.RabbitConstants.Im2MessageService,durable = "true"),
@@ -52,6 +58,15 @@ public class ChatOperateReceiver {
                 //处理消息
                 MessageContent messageContent = jsonObject.toJavaObject(MessageContent.class);
                 p2PMessageService.process(messageContent);
+            }else if(command.equals(MessageCommand.MSG_RECIVE_ACK.getCommand())){
+                //消息接收确认
+                MessageReceiveAckContent messageReceiveAckContent = jsonObject.toJavaObject(MessageReceiveAckContent.class);
+                messageSyncService.receiveMark(messageReceiveAckContent);
+            }else if(command.equals(MessageCommand.MSG_READED.getCommand())){
+                //消息接收确认
+                MessageReadedContent messageReadedContent = jsonObject.toJavaObject(MessageReadedContent.class);
+
+                messageSyncService.readMark(messageReadedContent);
             }
             channel.basicAck(deliveryTag, false);
         }catch (Exception e){

@@ -11,6 +11,7 @@ import com.cgz.im.codec.proto.MessagePack;
 import com.cgz.im.common.ResponseVO;
 import com.cgz.im.common.constant.Constants;
 import com.cgz.im.common.enums.ImConnectStatusEnum;
+import com.cgz.im.common.enums.command.GroupEventCommand;
 import com.cgz.im.common.enums.command.MessageCommand;
 import com.cgz.im.common.enums.command.SystemCommand;
 import com.cgz.im.common.model.UserClientDto;
@@ -110,29 +111,52 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<Message> {
             SessionSocketHolder.removeUserSession((NioSocketChannel) ctx.channel());
         }else if (command == SystemCommand.PING.getCommand()){ //心跳
             ctx.channel().attr(AttributeKey.valueOf(Constants.ReadTime)).set(System.currentTimeMillis());
-        }else if(command == MessageCommand.MSG_P2P.getCommand()){
-            CheckSendMessageReq req = new CheckSendMessageReq();
-            req.setAppId(msg.getMessageHeader().getAppId());
-            req.setCommand(msg.getMessageHeader().getCommand());
-            JSONObject jsonObject = JSON.parseObject(JSONObject.toJSONString(msg.getMessagePack()));
-            String fromId = jsonObject.getString("fromId");
-            String toId = jsonObject.getString("toId");
-            req.setFromId(fromId);
-            req.setToId(toId);
-            //1.调用校验消息发送方的接口
-            ResponseVO responseVO = feignMessageService.checkSendMessage(req);
-            if(responseVO.isOk()){
-                MQMessageProducer.sendMessage(msg,command);
-            }else{
-                ChatMessageAck chatMessageAck = new ChatMessageAck(jsonObject.getString("messageId"));
-                MessagePack<ResponseVO> ack = new MessagePack<>();
-                ack.setData(responseVO);
-                ack.setCommand(MessageCommand.MSG_ACK.getCommand());
-                ctx.channel().writeAndFlush(ack);
+        }else if(command == MessageCommand.MSG_P2P.getCommand() ||
+        command == GroupEventCommand.MSG_GROUP.getCommand()){
+            try {
+                String toId = "";
+                CheckSendMessageReq req = new CheckSendMessageReq();
+                req.setAppId(msg.getMessageHeader().getAppId());
+                req.setCommand(msg.getMessageHeader().getCommand());
+                JSONObject jsonObject = JSON.parseObject(JSONObject.toJSONString(msg.getMessagePack()));
+                String fromId = jsonObject.getString("fromId");
+                if(command == MessageCommand.MSG_P2P.getCommand()){
+                    toId = jsonObject.getString("toId");
+                }else {
+                    toId = jsonObject.getString("groupId");
+                }
+                req.setFromId(fromId);
+                req.setToId(toId);
+                //1.调用校验消息发送方的接口
+                ResponseVO responseVO = feignMessageService.checkSendMessage(req);
+                if(responseVO.isOk()){
+                    MQMessageProducer.sendMessage(msg,command);
+                }else{
+                    Integer ackCommand;
+                    if(command == MessageCommand.MSG_P2P.getCommand()){
+                        ackCommand = MessageCommand.MSG_ACK.getCommand();
+                    }else {
+                        ackCommand = GroupEventCommand.GROUP_MSG_ACK.getCommand();
+                    }
+                    ChatMessageAck chatMessageAck = new ChatMessageAck(jsonObject.getString("messageId"));
+                    MessagePack<ResponseVO> ack = new MessagePack<>();
+                    ack.setData(responseVO);
+                    ack.setCommand(ackCommand);
+                    ctx.channel().writeAndFlush(ack);
+                }
+            }catch (Exception e){
+
             }
+
             //成功则投递到Mq,失败则直接ack
         }else {
             MQMessageProducer.sendMessage(msg,command);
         }
+    }
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) {
+        SessionSocketHolder.offlineUserSession((NioSocketChannel) ctx.channel());
+        ctx.close();
     }
 }

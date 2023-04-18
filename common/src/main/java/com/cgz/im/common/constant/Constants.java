@@ -40,6 +40,28 @@ public class Constants {
          * 用户session,appId+UserSessionConstants+用户id
          */
         public static final String UserSessionConstants = ":userSession:";
+
+        /**
+         * 缓存客户端消息防重，格式： appId + :cacheMessage: + messageId
+         */
+        public static final String cacheMessage = "cacheMessage";
+
+        public static final String OfflineMessage = "offlineMessage";
+
+        /**
+         * seq 前缀
+         */
+        public static final String SeqPrefix = "seq";
+
+        /**
+         * 用户订阅列表，格式 ：appId + :subscribe: + userId。Hash结构，filed为订阅自己的人
+         */
+        public static final String subscribe = "subscribe";
+
+        /**
+         * 用户自定义在线状态，格式 ：appId + :userCustomerStatus: + userId。set，value为用户id
+         */
+        public static final String userCustomerStatus = "userCustomerStatus";
     }
 
     public static class RabbitConstants{
@@ -98,6 +120,26 @@ public class Constants {
         public static final String SendMessageAfter = "message.send.after";
 
         public static final String SendMessageBefore = "message.send.before";
+    }
+
+    public static class SeqConstants {
+        public static final String Message = "messageSeq";
+
+        public static final String GroupMessage = "groupMessageSeq";
+
+
+        public static final String Friendship = "friendshipSeq";
+
+//        public static final String FriendshipBlack = "friendshipBlackSeq";
+
+        public static final String FriendshipRequest = "friendshipRequestSeq";
+
+        public static final String FriendshipGroup = "friendshipGrouptSeq";
+
+        public static final String Group = "groupSeq";
+
+        public static final String Conversation = "conversationSeq";
+
     }
 
 }

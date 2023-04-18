@@ -11,12 +11,14 @@ import com.cgz.im.common.model.message.MessageContent;
 /*import com.cgz.im.common.model.message.OfflineMessageContent;
 import com.cgz.im.service.group.model.req.SendGroupMessageReq;
 import com.cgz.im.service.message.model.resp.SendMessageResp;*/
+import com.cgz.im.common.model.message.OfflineMessageContent;
 import com.cgz.im.service.group.model.req.SendGroupMessageReq;
 import com.cgz.im.service.message.model.resp.SendMessageResp;
 import com.cgz.im.service.message.service.CheckSendMessageService;
 /*import com.cgz.im.service.message.service.MessageStoreService;
 import com.cgz.im.service.seq.RedisSeq;*/
 import com.cgz.im.service.message.service.MessageStoreService;
+import com.cgz.im.service.seq.RedisSeq;
 import com.cgz.im.service.utils.MessageProducer;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,8 +46,8 @@ public class GroupMessageService {
     @Autowired
     MessageStoreService messageStoreService;
 
-    /*@Autowired
-    RedisSeq redisSeq;*/
+    @Autowired
+    RedisSeq redisSeq;
 
     private final ThreadPoolExecutor threadPoolExecutor;
 
@@ -70,7 +72,7 @@ public class GroupMessageService {
         //前置校验
         //这个用户是否被禁言 是否被禁用
         //发送方和接收方是否是好友
-        ResponseVO responseVO = imServerPermissionCheck(fromId,groupId,appId);
+        /*ResponseVO responseVO = imServerPermissionCheck(fromId,groupId,appId);
         if(responseVO.isOk()){
             messageStoreService.storeGroupMessage(messageContent);
             //1.回ack给自己
@@ -82,8 +84,8 @@ public class GroupMessageService {
         }else{
             //告诉客户端失败了
             ack(messageContent,responseVO);
-        }
-        /*GroupChatMessageContent messageFromMessageIdCache = messageStoreService.getMessageFromMessageIdCache(messageContent.getAppId(),
+        }*/
+        GroupChatMessageContent messageFromMessageIdCache = messageStoreService.getMessageFromMessageIdCache(messageContent.getAppId(),
                 messageContent.getMessageId(), GroupChatMessageContent.class);
         if(messageFromMessageIdCache != null){
             threadPoolExecutor.execute(() ->{
@@ -119,7 +121,7 @@ public class GroupMessageService {
 
                 messageStoreService.setMessageFromMessageIdCache(messageContent.getAppId(),
                         messageContent.getMessageId(),messageContent);
-            });*/
+            });
     }
 
     private void dispatchMessage(GroupChatMessageContent messageContent){
