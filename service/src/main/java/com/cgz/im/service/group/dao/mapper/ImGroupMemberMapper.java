@@ -16,6 +16,9 @@ public interface ImGroupMemberMapper extends BaseMapper<ImGroupMemberEntity> {
     @Select("select group_id from im_group_member where app_id = #{appId} AND member_id = #{memberId} ")
     List<String> getJoinedGroupId(Integer appId, String memberId);
 
+    @Select("select group_id from im_group_member where app_id = #{appId} AND member_id = #{memberId} and role != #{role}" )
+    List<String> syncJoinedGroupId(Integer appId, String memberId, int role);
+
     @Results({
             @Result(column = "member_id", property = "memberId"),
 //            @Result(column = "speak_flag", property = "speakFlag"),

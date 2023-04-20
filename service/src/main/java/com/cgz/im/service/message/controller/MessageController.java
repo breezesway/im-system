@@ -1,8 +1,10 @@
 package com.cgz.im.service.message.controller;
 
 import com.cgz.im.common.ResponseVO;
+import com.cgz.im.common.model.SyncReq;
 import com.cgz.im.common.model.message.CheckSendMessageReq;
 import com.cgz.im.service.message.model.req.SendMessageReq;
+import com.cgz.im.service.message.service.MessageSyncService;
 import com.cgz.im.service.message.service.P2PMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -17,8 +19,8 @@ public class MessageController {
     @Autowired
     P2PMessageService p2PMessageService;
 
-    /*@Autowired
-    MessageSyncService messageSyncService;*/
+    @Autowired
+    MessageSyncService messageSyncService;
 
     @RequestMapping("/send")
     public ResponseVO send(@RequestBody @Validated SendMessageReq req, Integer appId)  {
@@ -33,10 +35,10 @@ public class MessageController {
                 req.getAppId());
     }
 
-    /*@RequestMapping("/syncOfflineMessage")
+    @RequestMapping("/syncOfflineMessage")
     public ResponseVO syncOfflineMessage(@RequestBody
                                          @Validated SyncReq req, Integer appId)  {
         req.setAppId(appId);
         return messageSyncService.syncOfflineMessage(req);
-    }*/
+    }
 }

@@ -12,4 +12,6 @@ public class UpdateConversationPack {
     private Integer isTop;
 
     private Integer conversationType;
+
+    private Long sequence;
 }

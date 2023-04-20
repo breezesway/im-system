@@ -2,6 +2,7 @@ package com.cgz.im.service.friendship.service;
 
 import com.cgz.im.common.ResponseVO;
 import com.cgz.im.common.model.RequestBase;
+import com.cgz.im.common.model.SyncReq;
 import com.cgz.im.service.friendship.model.req.*;
 
 /**
@@ -32,4 +33,6 @@ public interface ImFriendService {
     ResponseVO deleteBlack(DeleteBlackReq req);
 
     ResponseVO checkBlack(CheckFriendShipReq req);
+
+    ResponseVO syncFriendshipList(SyncReq req);
 }

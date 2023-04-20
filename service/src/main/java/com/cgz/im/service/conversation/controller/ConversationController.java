@@ -1,7 +1,7 @@
 package com.cgz.im.service.conversation.controller;
 
 import com.cgz.im.common.ResponseVO;
-//import com.cgz.im.common.model.SyncReq;
+import com.cgz.im.common.model.SyncReq;
 import com.cgz.im.service.conversation.model.DeleteConversationReq;
 import com.cgz.im.service.conversation.model.UpdateConversationReq;
 import com.cgz.im.service.conversation.service.ConversationService;
@@ -35,10 +35,10 @@ public class ConversationController {
         return conversationService.updateConversation(req);
     }
 
-    /*@RequestMapping("/syncConversationList")
+    @RequestMapping("/syncConversationList")
     public ResponseVO syncFriendShipList(@RequestBody @Validated SyncReq req, Integer appId)  {
         req.setAppId(appId);
         return conversationService.syncConversationSet(req);
-    }*/
+    }
 
 }

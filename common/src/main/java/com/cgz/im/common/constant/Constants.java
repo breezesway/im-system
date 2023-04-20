@@ -127,7 +127,6 @@ public class Constants {
 
         public static final String GroupMessage = "groupMessageSeq";
 
-
         public static final String Friendship = "friendshipSeq";
 
 //        public static final String FriendshipBlack = "friendshipBlackSeq";

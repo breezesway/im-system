@@ -1,6 +1,7 @@
 package com.cgz.im.service.group.controller;
 
 import com.cgz.im.common.ResponseVO;
+import com.cgz.im.common.model.SyncReq;
 import com.cgz.im.service.group.model.req.*;
 import com.cgz.im.service.group.service.GroupMessageService;
 import com.cgz.im.service.group.service.ImGroupService;
@@ -81,5 +82,11 @@ public class ImGroupController {
         req.setAppId(appId);
         req.setOperator(identifier);
         return ResponseVO.successResponse(groupMessageService.send(req));
+    }
+
+    @RequestMapping("syncJoinedGroup")
+    public ResponseVO syncJoinedGroup(@RequestBody @Validated SyncReq req,Integer appId){
+        req.setAppId(appId);
+        return groupService.syncJoinedGroupList(req);
     }
 }

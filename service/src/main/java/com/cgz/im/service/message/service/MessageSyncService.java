@@ -1,16 +1,30 @@
 package com.cgz.im.service.message.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.cgz.im.codec.pack.message.MessageReadedPack;
+import com.cgz.im.common.ResponseVO;
+import com.cgz.im.common.constant.Constants;
 import com.cgz.im.common.enums.command.Command;
 import com.cgz.im.common.enums.command.GroupEventCommand;
 import com.cgz.im.common.enums.command.MessageCommand;
+import com.cgz.im.common.model.SyncReq;
+import com.cgz.im.common.model.SyncResp;
 import com.cgz.im.common.model.message.MessageReadedContent;
 import com.cgz.im.common.model.message.MessageReceiveAckContent;
+import com.cgz.im.common.model.message.OfflineMessageContent;
 import com.cgz.im.service.conversation.service.ConversationService;
 import com.cgz.im.service.utils.MessageProducer;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.DefaultTypedTuple;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class MessageSyncService {
@@ -20,6 +34,9 @@ public class MessageSyncService {
 
     @Autowired
     ConversationService conversationService;
+
+    @Autowired
+    RedisTemplate redisTemplate;
 
     public void receiveMark(MessageReceiveAckContent messageReceiveAckContent){
         messageProducer.sendToUser(messageReceiveAckContent.getToId(),
@@ -57,5 +74,39 @@ public class MessageSyncService {
             messageProducer.sendToUser(messageReadedPack.getToId(),GroupEventCommand.MSG_GROUP_READED_RECEIPT
                     ,messageReaded,messageReaded.getAppId());
         }
+    }
+
+    public ResponseVO syncOfflineMessage(SyncReq req) {
+        SyncResp<OfflineMessageContent> resp = new SyncResp<>();
+
+        String key = req.getAppId() + ":" + Constants.RedisConstants.OfflineMessage + ":" + req.getOperator();
+        //获取最大的seq
+        Long maxSeq = 0L;
+        ZSetOperations zSetOperations = redisTemplate.opsForZSet();
+        Set set = zSetOperations.reverseRangeWithScores(key, 0, 0);
+        if(!CollectionUtils.isEmpty(set)){
+            List list = new ArrayList(set);
+            DefaultTypedTuple o = (DefaultTypedTuple) list.get(0);
+            maxSeq = o.getScore().longValue();
+        }
+
+        List<OfflineMessageContent> respList = new ArrayList<>();
+        resp.setMaxSequence(maxSeq);
+
+        Set<ZSetOperations.TypedTuple> querySet = zSetOperations.rangeByScoreWithScores(key,
+                req.getLastSequence(), maxSeq, 0, req.getMaxLimit());
+        for (ZSetOperations.TypedTuple<String> typedTuple : querySet) {
+            String value = typedTuple.getValue();
+            OfflineMessageContent offlineMessageContent = JSONObject.parseObject(value, OfflineMessageContent.class);
+            respList.add(offlineMessageContent);
+        }
+        resp.setDataList(respList);
+
+        if(!CollectionUtils.isEmpty(respList)){
+            OfflineMessageContent offlineMessageContent = respList.get(respList.size() - 1);
+            resp.setCompleted(maxSeq <= offlineMessageContent.getMessageKey());
+        }
+
+        return ResponseVO.successResponse(resp);
     }
 }

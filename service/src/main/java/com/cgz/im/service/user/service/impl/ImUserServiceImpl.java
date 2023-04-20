@@ -10,6 +10,7 @@ import com.cgz.im.common.enums.DelFlagEnum;
 import com.cgz.im.common.enums.UserErrorCode;
 import com.cgz.im.common.enums.command.UserEventCommand;
 import com.cgz.im.common.exception.ApplicationException;
+import com.cgz.im.service.group.service.ImGroupService;
 import com.cgz.im.service.user.dao.ImUserDataEntity;
 import com.cgz.im.service.user.dao.mapper.ImUserDataMapper;
 import com.cgz.im.service.user.model.req.*;
@@ -20,12 +21,14 @@ import com.cgz.im.service.utils.CallbackService;
 import com.cgz.im.service.utils.MessageProducer;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ImUserServiceImpl implements ImUserService {
@@ -41,6 +44,12 @@ public class ImUserServiceImpl implements ImUserService {
 
     @Autowired
     MessageProducer messageProducer;
+
+    @Autowired
+    StringRedisTemplate stringRedisTemplate;
+
+    @Autowired
+    ImGroupService imGroupService;
 
     @Override
     public ResponseVO importUser(ImportUserReq req) {
@@ -189,5 +198,13 @@ public class ImUserServiceImpl implements ImUserService {
     @Override
     public ResponseVO login(LoginReq req) {
         return ResponseVO.successResponse();
+    }
+
+    @Override
+    public ResponseVO getUserSequence(GetUserSequenceReq req) {
+        Map<Object, Object> map = stringRedisTemplate.opsForHash().entries(req.getAppId() + ":" + Constants.RedisConstants.SeqPrefix + ":" + req.getUserId());
+        Long groupSeq = imGroupService.getUserGroupMaxSeq(req.getUserId(),req.getAppId());
+        map.put(Constants.SeqConstants.Group,groupSeq);
+        return ResponseVO.successResponse(map);
     }
 }

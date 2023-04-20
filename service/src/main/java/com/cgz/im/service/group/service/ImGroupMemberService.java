@@ -35,4 +35,5 @@ public interface ImGroupMemberService {
 
     ResponseVO speak(SpeaMemberReq req);
 
+    ResponseVO<Collection<String>> syncMemberJoinedGroup(String operator, Integer appId);
 }
