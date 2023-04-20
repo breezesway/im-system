@@ -13,10 +13,7 @@ import com.rabbitmq.client.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
-import org.springframework.amqp.rabbit.annotation.Exchange;
-import org.springframework.amqp.rabbit.annotation.Queue;
-import org.springframework.amqp.rabbit.annotation.QueueBinding;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.annotation.*;
 import org.springframework.amqp.support.AmqpHeaders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.Headers;
@@ -46,6 +43,7 @@ public class ChatOperateReceiver {
                     exchange = @Exchange(value = Constants.RabbitConstants.Im2MessageService,durable = "true")
             ),concurrency = "1"
     )
+    @RabbitHandler
     public void onChatMessage(@Payload Message message, @Headers Map<System,Object> headers,
                               Channel channel) throws Exception {
         String msg = new String(message.getBody(), StandardCharsets.UTF_8);

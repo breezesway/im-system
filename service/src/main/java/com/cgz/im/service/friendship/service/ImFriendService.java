@@ -5,6 +5,8 @@ import com.cgz.im.common.model.RequestBase;
 import com.cgz.im.common.model.SyncReq;
 import com.cgz.im.service.friendship.model.req.*;
 
+import java.util.List;
+
 /**
  * 朋友关系，包括好友和黑名单
  */
@@ -35,4 +37,6 @@ public interface ImFriendService {
     ResponseVO checkBlack(CheckFriendShipReq req);
 
     ResponseVO syncFriendshipList(SyncReq req);
+
+    List<String> getAllFriendId(String userId,Integer appId);
 }

@@ -5,6 +5,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.cgz.im.codec.pack.LoginPack;
 import com.cgz.im.codec.pack.message.ChatMessageAck;
+import com.cgz.im.codec.pack.user.LoginAckPack;
+import com.cgz.im.codec.pack.user.UserStatusChangeNotifyPack;
 import com.cgz.im.codec.proto.Message;
 import com.cgz.im.codec.proto.MessageHeader;
 import com.cgz.im.codec.proto.MessagePack;
@@ -14,6 +16,7 @@ import com.cgz.im.common.enums.ImConnectStatusEnum;
 import com.cgz.im.common.enums.command.GroupEventCommand;
 import com.cgz.im.common.enums.command.MessageCommand;
 import com.cgz.im.common.enums.command.SystemCommand;
+import com.cgz.im.common.enums.command.UserEventCommand;
 import com.cgz.im.common.model.UserClientDto;
 import com.cgz.im.common.model.UserSession;
 import com.cgz.im.common.model.message.CheckSendMessageReq;
@@ -106,6 +109,22 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<Message> {
             //这里采用Redis的发布订阅，因为redis的发布订阅可发送给所有端
             RTopic topic = redissonClient.getTopic(Constants.RedisConstants.UserLoginChannel);
             topic.publish(JSONObject.toJSONString(dto));
+
+            UserStatusChangeNotifyPack notifyPack = new UserStatusChangeNotifyPack();
+            notifyPack.setAppId(msgHeader.getAppId());
+            notifyPack.setUserId(loginPack.getUserId());
+            notifyPack.setStatus(ImConnectStatusEnum.ONLINE_STATUS.getCode());
+            //发送给MQ
+            MQMessageProducer.sendMessage(notifyPack,msgHeader, UserEventCommand.USER_ONLINE_STATUS_CHANGE.getCommand());
+            //告诉客户端我们登录成功
+            MessagePack<LoginAckPack> loginSuccess = new MessagePack<>();
+            LoginAckPack loginAckPack = new LoginAckPack();
+            loginAckPack.setUserId(loginPack.getUserId());
+            loginSuccess.setCommand(SystemCommand.LOGINACK.getCommand());
+            loginSuccess.setData(loginAckPack);
+            loginSuccess.setImei(msgHeader.getImei());
+            loginSuccess.setAppId(msgHeader.getAppId());
+            ctx.channel().writeAndFlush(loginSuccess);
 
         }else if(command == SystemCommand.LOGOUT.getCommand()){ //退出
             SessionSocketHolder.removeUserSession((NioSocketChannel) ctx.channel());

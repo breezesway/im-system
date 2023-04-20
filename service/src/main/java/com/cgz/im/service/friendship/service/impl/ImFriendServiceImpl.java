@@ -469,6 +469,11 @@ public class ImFriendServiceImpl implements ImFriendService {
         return ResponseVO.successResponse(resp);
     }
 
+    @Override
+    public List<String> getAllFriendId(String userId, Integer appId) {
+        return imFriendShipMapper.getAllFriendId(userId,appId);
+    }
+
     @Transactional
     public ResponseVO doUpdate(String fromId,FriendDto dto,Integer appId){
         long seq = redisSeq.doGetSeq(appId + ":" + Constants.SeqConstants.Friendship);
