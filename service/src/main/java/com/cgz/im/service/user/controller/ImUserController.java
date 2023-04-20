@@ -5,10 +5,9 @@ import com.cgz.im.common.ResponseVO;
 import com.cgz.im.common.route.RouteInfo;
 import com.cgz.im.common.route.RouterHandle;
 import com.cgz.im.common.utils.RouteInfoParseUtil;
-import com.cgz.im.service.user.model.req.GetUserSequenceReq;
-import com.cgz.im.service.user.model.req.ImportUserReq;
-import com.cgz.im.service.user.model.req.LoginReq;
+import com.cgz.im.service.user.model.req.*;
 import com.cgz.im.service.user.service.ImUserService;
+import com.cgz.im.service.user.service.ImUserStatusService;
 import com.cgz.im.service.utils.ZKit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -30,6 +29,9 @@ public class ImUserController {
 
     @Autowired
     ZKit zKit;
+
+    @Autowired
+    ImUserStatusService imUserStatusService;
 
     @RequestMapping("importUser")
     public ResponseVO importUser(@RequestBody ImportUserReq req, Integer appId){
@@ -65,20 +67,20 @@ public class ImUserController {
         return imUserService.getUserSequence(req);
     }
 
-    /*@RequestMapping("/subscribeUserOnlineStatus")
+    @RequestMapping("/subscribeUserOnlineStatus")
     public ResponseVO subscribeUserOnlineStatus(@RequestBody @Validated
-                                                        SubscribeUserOnlineStatusReq req, Integer appId,String identifier) {
+                                                        SubscribeUserOnlineStatusReq req, Integer appId, String identifier) {
         req.setAppId(appId);
-        req.setOperater(identifier);
+        req.setOperator(identifier);
         imUserStatusService.subscribeUserOnlineStatus(req);
         return ResponseVO.successResponse();
     }
 
     @RequestMapping("/setUserCustomerStatus")
     public ResponseVO setUserCustomerStatus(@RequestBody @Validated
-                                                    SetUserCustomerStatusReq req, Integer appId,String identifier) {
+                                                    SetUserCustomerStatusReq req, Integer appId, String identifier) {
         req.setAppId(appId);
-        req.setOperater(identifier);
+        req.setOperator(identifier);
         imUserStatusService.setUserCustomerStatus(req);
         return ResponseVO.successResponse();
     }
@@ -87,7 +89,7 @@ public class ImUserController {
     public ResponseVO queryFriendOnlineStatus(@RequestBody @Validated
                                                       PullFriendOnlineStatusReq req, Integer appId,String identifier) {
         req.setAppId(appId);
-        req.setOperater(identifier);
+        req.setOperator(identifier);
         return ResponseVO.successResponse(imUserStatusService.queryFriendOnlineStatus(req));
     }
 
@@ -95,8 +97,8 @@ public class ImUserController {
     public ResponseVO queryUserOnlineStatus(@RequestBody @Validated
                                                     PullUserOnlineStatusReq req, Integer appId,String identifier) {
         req.setAppId(appId);
-        req.setOperater(identifier);
+        req.setOperator(identifier);
         return ResponseVO.successResponse(imUserStatusService.queryUserOnlineStatus(req));
-    }*/
+    }
 
 }

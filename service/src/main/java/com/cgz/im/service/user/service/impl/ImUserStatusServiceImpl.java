@@ -16,6 +16,11 @@ import com.cgz.im.service.user.model.req.PullUserOnlineStatusReq;
 import com.cgz.im.service.user.model.req.SetUserCustomerStatusReq;
 import com.cgz.im.service.user.model.req.SubscribeUserOnlineStatusReq;
 import com.cgz.im.service.user.model.resp.UserOnlineStatusResp;*/
+import com.cgz.im.service.user.model.req.PullFriendOnlineStatusReq;
+import com.cgz.im.service.user.model.req.PullUserOnlineStatusReq;
+import com.cgz.im.service.user.model.req.SetUserCustomerStatusReq;
+import com.cgz.im.service.user.model.req.SubscribeUserOnlineStatusReq;
+import com.cgz.im.service.user.model.resp.UserOnlineStatusResp;
 import com.cgz.im.service.user.service.ImUserStatusService;
 import com.cgz.im.service.utils.MessageProducer;
 import com.cgz.im.service.utils.UserSessionUtils;
@@ -87,7 +92,7 @@ public class ImUserStatusServiceImpl implements ImUserStatusService {
         }
     }
 
-    /*@Override
+    @Override
     public void subscribeUserOnlineStatus(SubscribeUserOnlineStatusReq req) {
         // A
         // Z
@@ -104,14 +109,14 @@ public class ImUserStatusServiceImpl implements ImUserStatusService {
 
         for (String beSubUserId : req.getSubUserId()) {
             String userKey = req.getAppId() + ":" + Constants.RedisConstants.subscribe + ":" + beSubUserId;
-            stringRedisTemplate.opsForHash().put(userKey,req.getOperater(),subExpireTime.toString());
+            stringRedisTemplate.opsForHash().put(userKey,req.getOperator(),subExpireTime.toString());
         }
-    }*/
+    }
 
     /**
      * 设置自定义状态
      */
-    /*@Override
+    @Override
     public void setUserCustomerStatus(SetUserCustomerStatusReq req) {
         UserCustomStatusChangeNotifyPack userCustomStatusChangeNotifyPack = new UserCustomStatusChangeNotifyPack();
         userCustomStatusChangeNotifyPack.setCustomStatus(req.getCustomStatus());
@@ -129,7 +134,7 @@ public class ImUserStatusServiceImpl implements ImUserStatusService {
     @Override
     public Map<String, UserOnlineStatusResp> queryFriendOnlineStatus(PullFriendOnlineStatusReq req) {
 
-        List<String> allFriendId = imFriendService.getAllFriendId(req.getOperater(), req.getAppId());
+        List<String> allFriendId = imFriendService.getAllFriendId(req.getOperator(), req.getAppId());
         return getUserOnlineStatus(allFriendId,req.getAppId());
     }
 
@@ -156,6 +161,6 @@ public class ImUserStatusServiceImpl implements ImUserStatusService {
             result.put(uid,resp);
         }
         return result;
-    }*/
+    }
 
 }
