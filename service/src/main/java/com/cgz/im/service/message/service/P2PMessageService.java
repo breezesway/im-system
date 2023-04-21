@@ -1,8 +1,10 @@
 package com.cgz.im.service.message.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.cgz.im.codec.pack.message.ChatMessageAck;
 import com.cgz.im.codec.pack.message.MessageReceiveServerAckPack;
 import com.cgz.im.common.ResponseVO;
+import com.cgz.im.common.config.AppConfig;
 import com.cgz.im.common.constant.Constants;
 import com.cgz.im.common.enums.ConversationTypeEnum;
 import com.cgz.im.common.enums.command.MessageCommand;
@@ -12,6 +14,7 @@ import com.cgz.im.common.model.message.OfflineMessageContent;
 import com.cgz.im.service.message.model.req.SendMessageReq;
 import com.cgz.im.service.message.model.resp.SendMessageResp;
 import com.cgz.im.service.seq.RedisSeq;
+import com.cgz.im.service.utils.CallbackService;
 import com.cgz.im.service.utils.ConversationIdGenerate;
 import com.cgz.im.service.utils.MessageProducer;
 import org.slf4j.Logger;
@@ -43,6 +46,12 @@ public class P2PMessageService {
 
     @Autowired
     RedisSeq redisSeq;
+
+    @Autowired
+    AppConfig appConfig;
+
+    @Autowired
+    CallbackService callbackService;
 
     private final ThreadPoolExecutor threadPoolExecutor;
 
@@ -88,7 +97,7 @@ public class P2PMessageService {
         }
 
         //回调
-        /*ResponseVO responseVO = ResponseVO.successResponse();
+        ResponseVO responseVO = ResponseVO.successResponse();
         if(appConfig.isSendMessageAfterCallback()){
             responseVO = callbackService.beforeCallback(messageContent.getAppId(), Constants.CallbackCommand.SendMessageBefore
                     , JSONObject.toJSONString(messageContent));
@@ -97,7 +106,7 @@ public class P2PMessageService {
         if(!responseVO.isOk()){
             ack(messageContent,responseVO);
             return;
-        }*/
+        }
 
         //appId+seq+from+to (groupId)
         long seq = redisSeq.doGetSeq(messageContent.getAppId() + ":"
@@ -131,6 +140,12 @@ public class P2PMessageService {
                 if(clientInfos.isEmpty()){
                     receiveAck(messageContent);
                 }
+                if(appConfig.isSendMessageAfterCallback()){
+                    callbackService.callback(messageContent.getAppId(),Constants.CallbackCommand.SendMessageAfter,
+                            JSONObject.toJSONString(messageContent));
+                }
+
+                logger.info("消息处理完成：{}",messageContent.getMessageId());
             });
         /*}else{
             //告诉客户端失败了
