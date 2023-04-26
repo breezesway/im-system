@@ -53,10 +53,6 @@ public class MessageReceiver {
         }
     }
 
-    public static void init(){
-        startReceiveMessage();
-    }
-
     public static void init(String brokerId){
         if(StringUtils.isBlank(MessageReceiver.brokerId)){
             MessageReceiver.brokerId = brokerId;
