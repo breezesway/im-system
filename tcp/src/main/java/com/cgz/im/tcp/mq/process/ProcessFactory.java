@@ -1,4 +1,4 @@
-package com.cgz.im.tcp.receiver.process;
+package com.cgz.im.tcp.mq.process;
 
 public class ProcessFactory {
 

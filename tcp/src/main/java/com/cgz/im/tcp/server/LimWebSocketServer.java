@@ -20,11 +20,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class LimWebSocketServer {
-
     private final static Logger logger = LoggerFactory.getLogger(LimWebSocketServer.class);
-
     BootstrapConfig.TcpConfig config;
-
     EventLoopGroup mainGroup;
     EventLoopGroup subGroup;
     ServerBootstrap server;

@@ -18,11 +18,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class LimServer {
-
     private final static Logger logger = LoggerFactory.getLogger(LimServer.class);
-
     BootstrapConfig.TcpConfig config;
-
     EventLoopGroup mainGroup;
     EventLoopGroup subGroup;
     ServerBootstrap server;

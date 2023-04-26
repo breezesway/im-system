@@ -1,13 +1,13 @@
 package com.cgz.im.tcp;
 
 import com.cgz.im.codec.config.BootstrapConfig;
-import com.cgz.im.tcp.receiver.MessageReceiver;
+import com.cgz.im.tcp.mq.MessageReceiver;
 import com.cgz.im.tcp.redis.RedisManager;
-import com.cgz.im.tcp.register.RegistryZk;
-import com.cgz.im.tcp.register.ZKit;
+import com.cgz.im.tcp.zk.RegistryZk;
+import com.cgz.im.tcp.zk.ZKit;
 import com.cgz.im.tcp.server.LimServer;
 import com.cgz.im.tcp.server.LimWebSocketServer;
-import com.cgz.im.tcp.utils.MQFactory;
+import com.cgz.im.tcp.mq.MQFactory;
 import org.I0Itec.zkclient.ZkClient;
 import org.yaml.snakeyaml.Yaml;
 

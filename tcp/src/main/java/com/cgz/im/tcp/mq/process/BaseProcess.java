@@ -1,4 +1,4 @@
-package com.cgz.im.tcp.receiver.process;
+package com.cgz.im.tcp.mq.process;
 
 import com.cgz.im.codec.proto.MessagePack;
 import com.cgz.im.tcp.utils.SessionSocketHolder;

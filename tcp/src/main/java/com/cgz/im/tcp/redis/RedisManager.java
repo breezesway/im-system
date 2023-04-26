@@ -1,7 +1,6 @@
 package com.cgz.im.tcp.redis;
 
 import com.cgz.im.codec.config.BootstrapConfig;
-import com.cgz.im.tcp.receiver.UserLoginMessageListener;
 import org.redisson.api.RedissonClient;
 
 public class RedisManager {

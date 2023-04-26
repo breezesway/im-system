@@ -1,4 +1,4 @@
-package com.cgz.im.tcp.receiver;
+package com.cgz.im.tcp.redis;
 
 import com.alibaba.fastjson.JSONObject;
 import com.cgz.im.codec.proto.MessagePack;
@@ -7,7 +7,6 @@ import com.cgz.im.common.constant.Constants;
 import com.cgz.im.common.enums.DeviceMultiLoginEnum;
 import com.cgz.im.common.enums.command.SystemCommand;
 import com.cgz.im.common.model.UserClientDto;
-import com.cgz.im.tcp.redis.RedisManager;
 import com.cgz.im.tcp.utils.SessionSocketHolder;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.AttributeKey;

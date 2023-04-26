@@ -1,4 +1,4 @@
-package com.cgz.im.tcp.register;
+package com.cgz.im.tcp.zk;
 
 import com.cgz.im.common.constant.Constants;
 import org.I0Itec.zkclient.ZkClient;

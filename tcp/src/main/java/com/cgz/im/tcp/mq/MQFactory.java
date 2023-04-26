@@ -1,4 +1,4 @@
-package com.cgz.im.tcp.utils;
+package com.cgz.im.tcp.mq;
 
 import com.cgz.im.codec.config.BootstrapConfig;
 import com.rabbitmq.client.Channel;

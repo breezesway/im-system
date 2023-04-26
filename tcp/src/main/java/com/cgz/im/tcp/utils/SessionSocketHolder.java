@@ -8,7 +8,7 @@ import com.cgz.im.common.enums.ImConnectStatusEnum;
 import com.cgz.im.common.enums.command.UserEventCommand;
 import com.cgz.im.common.model.UserClientDto;
 import com.cgz.im.common.model.UserSession;
-import com.cgz.im.tcp.publish.MQMessageProducer;
+import com.cgz.im.tcp.mq.MQMessageProducer;
 import com.cgz.im.tcp.redis.RedisManager;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.AttributeKey;

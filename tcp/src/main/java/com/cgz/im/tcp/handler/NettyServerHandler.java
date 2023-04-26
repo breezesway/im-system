@@ -21,7 +21,7 @@ import com.cgz.im.common.model.UserClientDto;
 import com.cgz.im.common.model.UserSession;
 import com.cgz.im.common.model.message.CheckSendMessageReq;
 import com.cgz.im.tcp.feign.FeignMessageService;
-import com.cgz.im.tcp.publish.MQMessageProducer;
+import com.cgz.im.tcp.mq.MQMessageProducer;
 import com.cgz.im.tcp.redis.RedisManager;
 import com.cgz.im.tcp.utils.SessionSocketHolder;
 import feign.Feign;

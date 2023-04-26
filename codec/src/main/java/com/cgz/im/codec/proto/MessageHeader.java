@@ -23,7 +23,7 @@ public class MessageHeader {
     //4字节 解析类型
     private Integer messageType = 0x0;
 
-    //4字节 imel长度
+    //4字节 imei长度
     private Integer imeiLength;
 
     //4字节 包体长度

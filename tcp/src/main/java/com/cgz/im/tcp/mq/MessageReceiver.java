@@ -1,11 +1,10 @@
-package com.cgz.im.tcp.receiver;
+package com.cgz.im.tcp.mq;
 
 import com.alibaba.fastjson.JSONObject;
 import com.cgz.im.codec.proto.MessagePack;
 import com.cgz.im.common.constant.Constants;
-import com.cgz.im.tcp.receiver.process.BaseProcess;
-import com.cgz.im.tcp.receiver.process.ProcessFactory;
-import com.cgz.im.tcp.utils.MQFactory;
+import com.cgz.im.tcp.mq.process.BaseProcess;
+import com.cgz.im.tcp.mq.process.ProcessFactory;
 import com.rabbitmq.client.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

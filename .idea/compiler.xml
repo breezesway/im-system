@@ -19,6 +19,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="codec" options="-parameters" />
       <module name="common" options="-parameters" />
+      <module name="im-system" options="-parameters" />
       <module name="message-store" options="-parameters" />
       <module name="service" options="-parameters" />
       <module name="tcp" options="-parameters" />

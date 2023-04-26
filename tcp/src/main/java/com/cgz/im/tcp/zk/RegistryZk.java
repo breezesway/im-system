@@ -1,4 +1,4 @@
-package com.cgz.im.tcp.register;
+package com.cgz.im.tcp.zk;
 
 import com.cgz.im.codec.config.BootstrapConfig;
 import com.cgz.im.common.constant.Constants;

@@ -1,4 +1,4 @@
-package com.cgz.im.tcp.publish;
+package com.cgz.im.tcp.mq;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -6,7 +6,6 @@ import com.cgz.im.codec.proto.Message;
 import com.cgz.im.codec.proto.MessageHeader;
 import com.cgz.im.common.constant.Constants;
 import com.cgz.im.common.enums.command.CommandType;
-import com.cgz.im.tcp.utils.MQFactory;
 import com.rabbitmq.client.Channel;
 import lombok.extern.slf4j.Slf4j;
 
