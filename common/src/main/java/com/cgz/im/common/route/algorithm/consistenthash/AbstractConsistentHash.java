@@ -18,7 +18,7 @@ public abstract class AbstractConsistentHash {
     protected void sort(){};
 
     //get
-    protected abstract String getFirstNodeValue(String value);
+    protected abstract String getFirstNodeValue(String key);
 
     /**
      * 处理之前事件

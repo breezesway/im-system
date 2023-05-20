@@ -32,8 +32,8 @@ public class TreeMapConsistentHash extends AbstractConsistentHash{
     }
 
     @Override
-    protected String getFirstNodeValue(String value) {
-        Long hash = super.hash(value);
+    protected String getFirstNodeValue(String key) {
+        Long hash = super.hash(key);
         SortedMap<Long, String> last = treeMap.tailMap(hash);
         if(!last.isEmpty()){
             return last.get(last.firstKey());

@@ -14,11 +14,8 @@ import java.util.List;
 
 public class WebSocketMessageEncoder extends MessageToMessageEncoder<MessagePack> {
 
-    private static Logger log = LoggerFactory.getLogger(WebSocketMessageEncoder.class);
-
     @Override
     protected void encode(ChannelHandlerContext ctx, MessagePack msg, List<Object> out)  {
-
         try {
             String s = JSONObject.toJSONString(msg);
             ByteBuf byteBuf = Unpooled.directBuffer(8+s.length());
@@ -30,6 +27,5 @@ public class WebSocketMessageEncoder extends MessageToMessageEncoder<MessagePack
         }catch (Exception e){
             e.printStackTrace();
         }
-
     }
 }

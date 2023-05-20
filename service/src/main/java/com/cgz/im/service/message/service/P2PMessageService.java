@@ -83,15 +83,15 @@ public class P2PMessageService {
                 MessageContent.class);
         if(messageFromMessageIdCache != null){
             threadPoolExecutor.execute(()->{
-                    //1.回ack给自己
-                    ack(messageContent,ResponseVO.successResponse());
-            //2.发消息给同步在线端
-            syncToSender(messageFromMessageIdCache,messageFromMessageIdCache);
-            //3.发消息给对方在线端
-            List<ClientInfo> clientInfos = dispatchMessage(messageFromMessageIdCache);
-            if(clientInfos.isEmpty()){
-                receiveAck(messageContent);
-            }
+                //1.回ack给自己
+                ack(messageContent,ResponseVO.successResponse());
+                //2.发消息给同步在线端
+                syncToSender(messageFromMessageIdCache,messageFromMessageIdCache);
+                //3.发消息给对方在线端
+                List<ClientInfo> clientInfos = dispatchMessage(messageFromMessageIdCache);
+                if(clientInfos.isEmpty()){
+                    receiveAck(messageContent);
+                }
             });
             return;
         }

@@ -10,7 +10,7 @@ import java.util.List;
 
 public class MessageDecoder extends ByteToMessageDecoder {
     @Override
-    protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) throws Exception {
+    protected void decode(ChannelHandlerContext ctx, ByteBuf byteBuf, List<Object> list) {
         //请求头：
         //指令
         //clientType

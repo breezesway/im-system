@@ -12,7 +12,7 @@ import io.netty.handler.codec.MessageToByteEncoder;
 public class MessageEncoder extends MessageToByteEncoder {
 
     @Override
-    protected void encode(ChannelHandlerContext ctx, Object msg, ByteBuf out) throws Exception {
+    protected void encode(ChannelHandlerContext ctx, Object msg, ByteBuf out) {
         if(msg instanceof MessagePack){
             MessagePack msgBody = (MessagePack) msg;
             String s = JSONObject.toJSONString(msgBody.getData());
